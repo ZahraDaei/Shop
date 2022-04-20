@@ -1,0 +1,60 @@
+/*.inputBoxStyle{
+    margin-bottom:20px;
+}*/
+
+.grid-container {
+    display: grid;
+    grid-template-columns:auto 3fr;
+}
+
+.borderStyle {
+    border: 1px solid rgba(128, 128, 128, 0.21);
+    border-radius: 5px;
+}
+
+.inputStyle {
+    border: 1px solid rgba(128, 128, 128, 0.21);
+    border-radius: 5px;
+    padding: 5px;
+}
+
+    .inputStyle:focus {
+        outline: none;
+    }
+
+.inputFlexBox {
+    display: flex;
+}
+
+.justifyLeft {
+    justify-content: left;
+}
+
+.justifyRight{
+    justify-content:right;
+}
+
+.deleteDiv {
+    cursor: pointer;
+    color: red;
+    padding: 5px 10px;
+    border: 1px solid transparent;
+}
+
+    .deleteDiv:hover {
+        padding: 5px 10px;
+        border: 1px solid rgba(128, 128, 128, 0.21);
+        border-radius: 3px;
+    }
+
+.formStyle {
+    padding: 40px;
+    height: fit-content;
+}
+
+.inputErrorStyle {
+    color: red;
+    text-align: left;
+    height: 30px;
+}
+

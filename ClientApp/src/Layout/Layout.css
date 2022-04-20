@@ -1,0 +1,32 @@
+.footer {
+    position: relative; 
+    height: auto;
+    width: 100%;
+    display: flex;
+    /* align-items: center;
+    justify-content: center; */
+    overflow: hidden;
+
+}
+
+.footer::before {    
+      content: "";
+      background-image: url('../images/image4.jpg');
+      background-size: cover;
+      position: absolute;
+      top: 0px;
+      right: 0px;
+      bottom: 0px;
+      left: 0px;
+      opacity: 0.4;
+      height: 300px;
+}
+
+.footer div {
+    position: relative;
+    color:black;
+  }
+
+  .links li a{
+      text-decoration: none;
+  }

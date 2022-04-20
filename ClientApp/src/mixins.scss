@@ -1,0 +1,32 @@
+@mixin border($direction:all,$color:#e7e7ea) {
+  border-color: transparent;
+  border-style: solid;
+  border-width: 1px;
+  @if $direction == top {
+    border-top-color: $color;
+  } @else if $direction == right {
+    border-right-color: $color;
+  } @else if $direction == bottom {
+    border-bottom-color: $color;
+  } @else if $direction == left {
+    border-left-color: $color;
+  } @else if $direction == all {
+    border-color: $color;
+  } @else {
+    @error "Unknown direction #{$direction}.";
+  }
+}
+
+@mixin radious($radious:5px) {
+  border-radius: $radious;
+}
+
+@mixin pictureFram($height, $width) {
+  width: $width;
+  height: $height;
+}
+
+@mixin pictWidth {
+    max-width: 100%;
+}
+
