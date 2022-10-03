@@ -1,0 +1,217 @@
+@import "mixins";
+
+a{
+  text-decoration: none!important;
+  color:green!important;
+  
+}
+
+.categorySteps{}
+
+.categorySteps::before{
+  content: url(./Icons/Arrow-down.svg);
+
+}
+
+
+.inputBox {
+    border: none;
+    width: 100%;
+    font-size: 12px;
+    background-color: #38282805;
+    line-height: 40px;
+    border-radius: 5px;
+    position: relative;
+}
+
+.inputBox input{
+  width:inherit;
+  border: none;
+background-color: transparent;
+outline: none;
+padding: 7px 28px 8px 15px;
+}
+
+.inputBox::before{
+content: url(./Icons/Search_Icon.svg) ;
+position: absolute;
+right: 7px;
+top: 12px;
+font-size: 16px;
+}
+.inputBox input:focus{
+  outline: solid;
+  outline-color: #00bfd6;
+  outline-width: 0.5px;
+  border-radius: 5px;
+  background-color: white;
+}
+
+
+.inputBox span{
+  position: absolute;
+  top:8px;
+  left: 10px;
+}
+
+.productCard{
+  border: 1px solid rgba(128, 128, 128, 0.25);
+    border-radius: 5px;
+    overflow: hidden;
+    height:360px;
+    max-height: 560px;
+    background-color: white;
+}
+
+.productCard:hover{
+  box-shadow: 0px 0px 20px -10px;
+  position:relative
+}
+
+/* .row > * {
+  padding-right: 0!important;
+    padding-left:0!important
+    ;
+} */
+
+.flex_row{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.emtedadLine{
+  height: 1px;
+  background-color: #8080804d;
+  width: 100%;
+}
+
+.minWidth{
+  padding:20px;
+  min-height: 500px;
+  width: 100%;
+  background-color: white;
+  text-align: center;
+}
+
+.noFocus{
+  color:#808080d1;
+}
+
+.shoppingCartSection{
+  background-color: #f7f7f8;
+  border:1px solid #e0e0e2;
+  border-radius: 5px;
+}
+
+.centerBox{
+  text-align: center;
+  margin-top: 200px;
+}
+
+.title{
+  width:100%;
+  @include border("bottom");
+
+}
+
+.shoppingCartProduct{
+  @include border();
+  @include radious();
+}
+
+.productCart{
+  @include border("bottom");
+  
+}
+
+.shoppingCartImg{
+  @include pictureFram(80px, 80px);
+}
+.imgWidth{
+  @include pictWidth();
+}
+ .price{}
+ .price::after{
+   content: "تومان";
+ }
+
+ .inc-dec-handler{
+  @include border();
+  @include radious();
+  color:#ef4056;
+ }
+
+ .inc, .dec{
+   cursor: pointer;
+ }
+  
+.pageNotification{
+  @include border();
+  min-height: 500px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.radious{
+  @include radious();
+}
+
+
+.connectPink{}
+.connectPink::before{
+ content: " ";
+ height: 1px;
+ background-color:#f17384 ;
+ margin-left: 10px;
+ margin-right: 10px;
+ width:95px;
+ display: inline-block;
+ align-self: center;
+}
+
+.connectGrey{}
+.connectGrey::before{
+ content: " ";
+ height: 1px;
+ background-color:#8b8b8d ;
+ margin-left: 10px;
+ margin-right: 10px;
+ width:95px;
+ display: inline-block;
+ align-self: center;
+}
+
+
+
+.iconColorRed{
+  color:#ef394e;
+  font-size: larger;
+  font-weight: bold;
+}
+.iconColorPink{
+  color: #f17384 !important;
+  font-size: medium;
+}
+.iconColorGrey{
+  color:#8b8b8d;
+  font-size: medium;
+}
+
+.redColor{
+  color:#ef394e;
+}
+
+.greyColor{
+  color:#8b8b8d;
+}
+
+.smaller{
+  font-size:smaller ;
+}
+
+.dropdown-menu{
+  overflow: scroll;
+  height: 200px;
+}

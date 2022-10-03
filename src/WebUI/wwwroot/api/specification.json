@@ -1,0 +1,500 @@
+{
+  "x-generator": "NSwag v13.9.4.0 (NJsonSchema v10.3.1.0 (Newtonsoft.Json v12.0.0.0))",
+  "openapi": "3.0.0",
+  "info": {
+    "title": "CleanArchitecture API",
+    "version": "1.0.0"
+  },
+  "paths": {
+    "/Category/getCategory": {
+      "get": {
+        "tags": [
+          "Category"
+        ],
+        "operationId": "Category_GetCategoryList",
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CategoryVm"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/Category/getCategoryTree": {
+      "get": {
+        "tags": [
+          "Category"
+        ],
+        "operationId": "Category_Get",
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/TreeItemOfCategoryDto"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/Category": {
+      "post": {
+        "tags": [
+          "Category"
+        ],
+        "operationId": "Category_Create",
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "Name": {
+                    "type": "string",
+                    "nullable": true
+                  },
+                  "FarsiName": {
+                    "type": "string",
+                    "nullable": true
+                  },
+                  "ImageContent": {
+                    "type": "string",
+                    "format": "binary",
+                    "nullable": true
+                  },
+                  "ParentId": {
+                    "type": "integer",
+                    "format": "int64"
+                  },
+                  "Specifications": {
+                    "type": "string",
+                    "nullable": true
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "integer",
+                  "format": "int64"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/Product": {
+      "post": {
+        "tags": [
+          "Product"
+        ],
+        "operationId": "Product_Create",
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "BrandName": {
+                    "type": "string",
+                    "nullable": true
+                  },
+                  "Description": {
+                    "type": "string",
+                    "nullable": true
+                  },
+                  "ShortDescription": {
+                    "type": "string",
+                    "nullable": true
+                  },
+                  "Name": {
+                    "type": "string",
+                    "nullable": true
+                  },
+                  "FarsiName": {
+                    "type": "string",
+                    "nullable": true
+                  },
+                  "Price": {
+                    "type": "number",
+                    "format": "decimal"
+                  },
+                  "Image": {
+                    "type": "string",
+                    "format": "binary",
+                    "nullable": true
+                  },
+                  "ProductSpecifications": {
+                    "type": "string",
+                    "nullable": true
+                  },
+                  "CategoryId": {
+                    "type": "integer",
+                    "format": "int64"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "integer",
+                  "format": "int64"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "CategoryVm": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "categoryDtos": {
+            "type": "array",
+            "nullable": true,
+            "items": {
+              "$ref": "#/components/schemas/CategoryDto"
+            }
+          }
+        }
+      },
+      "CategoryDto": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "farsiName": {
+            "type": "string",
+            "nullable": true
+          },
+          "image": {
+            "type": "string",
+            "nullable": true
+          },
+          "content": {
+            "type": "string",
+            "format": "byte",
+            "nullable": true
+          },
+          "parentId": {
+            "type": "integer",
+            "format": "int64",
+            "nullable": true
+          },
+          "specifications": {
+            "type": "array",
+            "nullable": true,
+            "items": {
+              "$ref": "#/components/schemas/Specification"
+            }
+          }
+        }
+      },
+      "Specification": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "specificationKey": {
+            "type": "string",
+            "nullable": true
+          },
+          "categoryId": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "category": {
+            "nullable": true,
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/Category"
+              }
+            ]
+          },
+          "productSpecifications": {
+            "type": "array",
+            "nullable": true,
+            "items": {
+              "$ref": "#/components/schemas/ProductSpecification"
+            }
+          }
+        }
+      },
+      "Category": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "farsiName": {
+            "type": "string",
+            "nullable": true
+          },
+          "image": {
+            "type": "string",
+            "nullable": true
+          },
+          "parentId": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "content": {
+            "type": "string",
+            "format": "byte",
+            "nullable": true
+          },
+          "productCategories": {
+            "type": "array",
+            "nullable": true,
+            "items": {
+              "$ref": "#/components/schemas/ProductCategory"
+            }
+          },
+          "specifications": {
+            "type": "array",
+            "nullable": true,
+            "items": {
+              "$ref": "#/components/schemas/Specification"
+            }
+          }
+        }
+      },
+      "ProductCategory": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "productId": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "categoryId": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "product": {
+            "nullable": true,
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/Product"
+              }
+            ]
+          },
+          "category": {
+            "nullable": true,
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/Category"
+              }
+            ]
+          }
+        }
+      },
+      "Product": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "brandName": {
+            "type": "string",
+            "nullable": true
+          },
+          "description": {
+            "type": "string",
+            "nullable": true
+          },
+          "shortDescription": {
+            "type": "string",
+            "nullable": true
+          },
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "farsiName": {
+            "type": "string",
+            "nullable": true
+          },
+          "price": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "image": {
+            "type": "string",
+            "nullable": true
+          },
+          "cartProducts": {
+            "type": "array",
+            "nullable": true,
+            "items": {
+              "$ref": "#/components/schemas/CartProduct"
+            }
+          },
+          "productSpecifications": {
+            "type": "array",
+            "nullable": true,
+            "items": {
+              "$ref": "#/components/schemas/ProductSpecification"
+            }
+          },
+          "productCategories": {
+            "type": "array",
+            "nullable": true,
+            "items": {
+              "$ref": "#/components/schemas/ProductCategory"
+            }
+          }
+        }
+      },
+      "CartProduct": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "amount": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "product": {
+            "nullable": true,
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/Product"
+              }
+            ]
+          },
+          "productId": {
+            "type": "integer",
+            "format": "int64"
+          }
+        }
+      },
+      "ProductSpecification": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "specificationId": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "specification": {
+            "nullable": true,
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/Specification"
+              }
+            ]
+          },
+          "productId": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "product": {
+            "nullable": true,
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/Product"
+              }
+            ]
+          },
+          "specificationValue": {
+            "type": "string",
+            "nullable": true
+          }
+        }
+      },
+      "TreeItemOfCategoryDto": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "item": {
+            "nullable": true,
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/CategoryDto"
+              }
+            ]
+          },
+          "children": {
+            "type": "array",
+            "nullable": true,
+            "items": {
+              "$ref": "#/components/schemas/TreeItemOfCategoryDto"
+            }
+          }
+        }
+      }
+    },
+    "securitySchemes": {
+      "JWT": {
+        "type": "apiKey",
+        "description": "Type into the textbox: Bearer {your JWT token}.",
+        "name": "Authorization",
+        "in": "header"
+      }
+    }
+  },
+  "security": [
+    {
+      "JWT": []
+    }
+  ]
+}

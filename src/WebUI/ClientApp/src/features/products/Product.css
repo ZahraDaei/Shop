@@ -1,0 +1,24 @@
+.category{
+    display: flex;
+    flex-direction: row;
+    justify-content: start;
+}
+
+
+.category >div{
+    padding: 20px;
+    margin: 0px 10px;
+    background-color: rgba(128, 128, 128, 0.08);
+    border-radius: 3px;
+    display: flex;
+    flex-direction: column;
+}
+
+.css-g0jugy-MuiCollapse-root-MuiTreeItem-group {
+    padding: 0 20px !important;
+}
+
+.css-1g86id8-MuiTreeItem-content .MuiTreeItem-label {
+    font-family: inherit!important;
+    font-size:small!important;
+}
