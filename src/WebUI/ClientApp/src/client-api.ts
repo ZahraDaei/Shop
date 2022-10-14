@@ -190,6 +190,53 @@ export class ProductClient {
         this.baseUrl = baseUrl !== undefined && baseUrl !== null ? baseUrl : "";
     }
 
+    get(  cancelToken?: CancelToken | undefined): Promise<ProductVm> {
+        let url_ = this.baseUrl + "/Product";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ = <AxiosRequestConfig>{
+            method: "GET",
+            url: url_,
+            headers: {
+                "Accept": "application/json"
+            },
+            cancelToken
+        };
+
+        return this.instance.request(options_).catch((_error: any) => {
+            if (isAxiosError(_error) && _error.response) {
+                return _error.response;
+            } else {
+                throw _error;
+            }
+        }).then((_response: AxiosResponse) => {
+            return this.processGet(_response);
+        });
+    }
+
+    protected processGet(response: AxiosResponse): Promise<ProductVm> {
+        const status = response.status;
+        let _headers: any = {};
+        if (response.headers && typeof response.headers === "object") {
+            for (let k in response.headers) {
+                if (response.headers.hasOwnProperty(k)) {
+                    _headers[k] = response.headers[k];
+                }
+            }
+        }
+        if (status === 200) {
+            const _responseText = response.data;
+            let result200: any = null;
+            let resultData200  = _responseText;
+            result200 = ProductVm.fromJS(resultData200);
+            return result200;
+        } else if (status !== 200 && status !== 204) {
+            const _responseText = response.data;
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+        }
+        return Promise.resolve<ProductVm>(<any>null);
+    }
+
     create(brandName: string | null | undefined, description: string | null | undefined, shortDescription: string | null | undefined, name: string | null | undefined, farsiName: string | null | undefined, price: number | undefined, image: FileParameter | null | undefined, productSpecifications: string | null | undefined, categoryId: number | undefined , cancelToken?: CancelToken | undefined): Promise<number> {
         let url_ = this.baseUrl + "/Product";
         url_ = url_.replace(/[?&]$/, "");
@@ -260,6 +307,166 @@ export class ProductClient {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
         }
         return Promise.resolve<number>(<any>null);
+    }
+}
+
+export class ShoppingCartClient {
+    private instance: AxiosInstance;
+    private baseUrl: string;
+    protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
+
+    constructor(baseUrl?: string, instance?: AxiosInstance) {
+        this.instance = instance ? instance : axios.create();
+        this.baseUrl = baseUrl !== undefined && baseUrl !== null ? baseUrl : "";
+    }
+
+    getCartProductList(  cancelToken?: CancelToken | undefined): Promise<CartProductVm> {
+        let url_ = this.baseUrl + "/ShoppingCart/GetCartProductList";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ = <AxiosRequestConfig>{
+            method: "GET",
+            url: url_,
+            headers: {
+                "Accept": "application/json"
+            },
+            cancelToken
+        };
+
+        return this.instance.request(options_).catch((_error: any) => {
+            if (isAxiosError(_error) && _error.response) {
+                return _error.response;
+            } else {
+                throw _error;
+            }
+        }).then((_response: AxiosResponse) => {
+            return this.processGetCartProductList(_response);
+        });
+    }
+
+    protected processGetCartProductList(response: AxiosResponse): Promise<CartProductVm> {
+        const status = response.status;
+        let _headers: any = {};
+        if (response.headers && typeof response.headers === "object") {
+            for (let k in response.headers) {
+                if (response.headers.hasOwnProperty(k)) {
+                    _headers[k] = response.headers[k];
+                }
+            }
+        }
+        if (status === 200) {
+            const _responseText = response.data;
+            let result200: any = null;
+            let resultData200  = _responseText;
+            result200 = CartProductVm.fromJS(resultData200);
+            return result200;
+        } else if (status !== 200 && status !== 204) {
+            const _responseText = response.data;
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+        }
+        return Promise.resolve<CartProductVm>(<any>null);
+    }
+
+    create(command: CreateCartProductCommand , cancelToken?: CancelToken | undefined): Promise<number> {
+        let url_ = this.baseUrl + "/ShoppingCart/createCartProduct";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(command);
+
+        let options_ = <AxiosRequestConfig>{
+            data: content_,
+            method: "POST",
+            url: url_,
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            },
+            cancelToken
+        };
+
+        return this.instance.request(options_).catch((_error: any) => {
+            if (isAxiosError(_error) && _error.response) {
+                return _error.response;
+            } else {
+                throw _error;
+            }
+        }).then((_response: AxiosResponse) => {
+            return this.processCreate(_response);
+        });
+    }
+
+    protected processCreate(response: AxiosResponse): Promise<number> {
+        const status = response.status;
+        let _headers: any = {};
+        if (response.headers && typeof response.headers === "object") {
+            for (let k in response.headers) {
+                if (response.headers.hasOwnProperty(k)) {
+                    _headers[k] = response.headers[k];
+                }
+            }
+        }
+        if (status === 200) {
+            const _responseText = response.data;
+            let result200: any = null;
+            let resultData200  = _responseText;
+            result200 = resultData200 !== undefined ? resultData200 : <any>null;
+            return result200;
+        } else if (status !== 200 && status !== 204) {
+            const _responseText = response.data;
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+        }
+        return Promise.resolve<number>(<any>null);
+    }
+
+    delete(command: DeleteCartProductCommand , cancelToken?: CancelToken | undefined): Promise<Unit> {
+        let url_ = this.baseUrl + "/ShoppingCart/deleteCartProduct";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(command);
+
+        let options_ = <AxiosRequestConfig>{
+            data: content_,
+            method: "DELETE",
+            url: url_,
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            },
+            cancelToken
+        };
+
+        return this.instance.request(options_).catch((_error: any) => {
+            if (isAxiosError(_error) && _error.response) {
+                return _error.response;
+            } else {
+                throw _error;
+            }
+        }).then((_response: AxiosResponse) => {
+            return this.processDelete(_response);
+        });
+    }
+
+    protected processDelete(response: AxiosResponse): Promise<Unit> {
+        const status = response.status;
+        let _headers: any = {};
+        if (response.headers && typeof response.headers === "object") {
+            for (let k in response.headers) {
+                if (response.headers.hasOwnProperty(k)) {
+                    _headers[k] = response.headers[k];
+                }
+            }
+        }
+        if (status === 200) {
+            const _responseText = response.data;
+            let result200: any = null;
+            let resultData200  = _responseText;
+            result200 = Unit.fromJS(resultData200);
+            return result200;
+        } else if (status !== 200 && status !== 204) {
+            const _responseText = response.data;
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+        }
+        return Promise.resolve<Unit>(<any>null);
     }
 }
 
@@ -670,8 +877,8 @@ export interface IProduct {
 export class CartProduct implements ICartProduct {
     id?: number;
     amount?: number;
-    product?: Product | undefined;
     productId?: number;
+    product?: Product | undefined;
 
     constructor(data?: ICartProduct) {
         if (data) {
@@ -686,8 +893,8 @@ export class CartProduct implements ICartProduct {
         if (_data) {
             this.id = _data["id"];
             this.amount = _data["amount"];
-            this.product = _data["product"] ? Product.fromJS(_data["product"]) : <any>undefined;
             this.productId = _data["productId"];
+            this.product = _data["product"] ? Product.fromJS(_data["product"]) : <any>undefined;
         }
     }
 
@@ -702,8 +909,8 @@ export class CartProduct implements ICartProduct {
         data = typeof data === 'object' ? data : {};
         data["id"] = this.id;
         data["amount"] = this.amount;
-        data["product"] = this.product ? this.product.toJSON() : <any>undefined;
         data["productId"] = this.productId;
+        data["product"] = this.product ? this.product.toJSON() : <any>undefined;
         return data; 
     }
 }
@@ -711,8 +918,8 @@ export class CartProduct implements ICartProduct {
 export interface ICartProduct {
     id?: number;
     amount?: number;
-    product?: Product | undefined;
     productId?: number;
+    product?: Product | undefined;
 }
 
 export class ProductSpecification implements IProductSpecification {
@@ -817,6 +1024,344 @@ export class TreeItemOfCategoryDto implements ITreeItemOfCategoryDto {
 export interface ITreeItemOfCategoryDto {
     item?: CategoryDto | undefined;
     children?: TreeItemOfCategoryDto[] | undefined;
+}
+
+export class ProductVm implements IProductVm {
+    productDtos?: ProductDto[] | undefined;
+
+    constructor(data?: IProductVm) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            if (Array.isArray(_data["productDtos"])) {
+                this.productDtos = [] as any;
+                for (let item of _data["productDtos"])
+                    this.productDtos!.push(ProductDto.fromJS(item));
+            }
+        }
+    }
+
+    static fromJS(data: any): ProductVm {
+        data = typeof data === 'object' ? data : {};
+        let result = new ProductVm();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        if (Array.isArray(this.productDtos)) {
+            data["productDtos"] = [];
+            for (let item of this.productDtos)
+                data["productDtos"].push(item.toJSON());
+        }
+        return data; 
+    }
+}
+
+export interface IProductVm {
+    productDtos?: ProductDto[] | undefined;
+}
+
+export class ProductDto implements IProductDto {
+    id?: number;
+    brandName?: string | undefined;
+    description?: string | undefined;
+    shortDescription?: string | undefined;
+    name?: string | undefined;
+    farsiName?: string | undefined;
+    price?: number;
+    image?: string | undefined;
+    categoryName?: string | undefined;
+    categoryId?: number;
+
+    constructor(data?: IProductDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.brandName = _data["brandName"];
+            this.description = _data["description"];
+            this.shortDescription = _data["shortDescription"];
+            this.name = _data["name"];
+            this.farsiName = _data["farsiName"];
+            this.price = _data["price"];
+            this.image = _data["image"];
+            this.categoryName = _data["categoryName"];
+            this.categoryId = _data["categoryId"];
+        }
+    }
+
+    static fromJS(data: any): ProductDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new ProductDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["brandName"] = this.brandName;
+        data["description"] = this.description;
+        data["shortDescription"] = this.shortDescription;
+        data["name"] = this.name;
+        data["farsiName"] = this.farsiName;
+        data["price"] = this.price;
+        data["image"] = this.image;
+        data["categoryName"] = this.categoryName;
+        data["categoryId"] = this.categoryId;
+        return data; 
+    }
+}
+
+export interface IProductDto {
+    id?: number;
+    brandName?: string | undefined;
+    description?: string | undefined;
+    shortDescription?: string | undefined;
+    name?: string | undefined;
+    farsiName?: string | undefined;
+    price?: number;
+    image?: string | undefined;
+    categoryName?: string | undefined;
+    categoryId?: number;
+}
+
+export class CartProductVm implements ICartProductVm {
+    cartProductDtos?: CartProductDto[] | undefined;
+
+    constructor(data?: ICartProductVm) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            if (Array.isArray(_data["cartProductDtos"])) {
+                this.cartProductDtos = [] as any;
+                for (let item of _data["cartProductDtos"])
+                    this.cartProductDtos!.push(CartProductDto.fromJS(item));
+            }
+        }
+    }
+
+    static fromJS(data: any): CartProductVm {
+        data = typeof data === 'object' ? data : {};
+        let result = new CartProductVm();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        if (Array.isArray(this.cartProductDtos)) {
+            data["cartProductDtos"] = [];
+            for (let item of this.cartProductDtos)
+                data["cartProductDtos"].push(item.toJSON());
+        }
+        return data; 
+    }
+}
+
+export interface ICartProductVm {
+    cartProductDtos?: CartProductDto[] | undefined;
+}
+
+export class CartProductDto implements ICartProductDto {
+    id?: number;
+    amount?: number;
+    productId?: number;
+    brandName?: string | undefined;
+    description?: string | undefined;
+    shortDescription?: string | undefined;
+    name?: string | undefined;
+    farsiName?: string | undefined;
+    price?: number;
+    image?: string | undefined;
+
+    constructor(data?: ICartProductDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.amount = _data["amount"];
+            this.productId = _data["productId"];
+            this.brandName = _data["brandName"];
+            this.description = _data["description"];
+            this.shortDescription = _data["shortDescription"];
+            this.name = _data["name"];
+            this.farsiName = _data["farsiName"];
+            this.price = _data["price"];
+            this.image = _data["image"];
+        }
+    }
+
+    static fromJS(data: any): CartProductDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new CartProductDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["amount"] = this.amount;
+        data["productId"] = this.productId;
+        data["brandName"] = this.brandName;
+        data["description"] = this.description;
+        data["shortDescription"] = this.shortDescription;
+        data["name"] = this.name;
+        data["farsiName"] = this.farsiName;
+        data["price"] = this.price;
+        data["image"] = this.image;
+        return data; 
+    }
+}
+
+export interface ICartProductDto {
+    id?: number;
+    amount?: number;
+    productId?: number;
+    brandName?: string | undefined;
+    description?: string | undefined;
+    shortDescription?: string | undefined;
+    name?: string | undefined;
+    farsiName?: string | undefined;
+    price?: number;
+    image?: string | undefined;
+}
+
+export class CreateCartProductCommand implements ICreateCartProductCommand {
+    amount?: number;
+    productId?: number;
+
+    constructor(data?: ICreateCartProductCommand) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.amount = _data["amount"];
+            this.productId = _data["productId"];
+        }
+    }
+
+    static fromJS(data: any): CreateCartProductCommand {
+        data = typeof data === 'object' ? data : {};
+        let result = new CreateCartProductCommand();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["amount"] = this.amount;
+        data["productId"] = this.productId;
+        return data; 
+    }
+}
+
+export interface ICreateCartProductCommand {
+    amount?: number;
+    productId?: number;
+}
+
+export class Unit implements IUnit {
+
+    constructor(data?: IUnit) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+    }
+
+    static fromJS(data: any): Unit {
+        data = typeof data === 'object' ? data : {};
+        let result = new Unit();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        return data; 
+    }
+}
+
+export interface IUnit {
+}
+
+export class DeleteCartProductCommand implements IDeleteCartProductCommand {
+    id?: number;
+
+    constructor(data?: IDeleteCartProductCommand) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+        }
+    }
+
+    static fromJS(data: any): DeleteCartProductCommand {
+        data = typeof data === 'object' ? data : {};
+        let result = new DeleteCartProductCommand();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        return data; 
+    }
+}
+
+export interface IDeleteCartProductCommand {
+    id?: number;
 }
 
 export interface FileParameter {

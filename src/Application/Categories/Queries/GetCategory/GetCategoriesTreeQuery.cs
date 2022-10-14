@@ -49,7 +49,7 @@ namespace Shop.Application.Categories.Queries.GetCategory
                 //    Item=catRoot
                 //};
                     
-                return root;
+                    return root;
             }
             catch (Exception e)
             {

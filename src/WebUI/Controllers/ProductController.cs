@@ -1,15 +1,8 @@
 ﻿using AutoMapper;
-using AutoMapper.QueryableExtensions;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Shop.Application.Products.Commands.CreateProduct;
-using Shop.ModelDTO;
-using Shop.ModelVM;
-using System;
-using System.Collections.Generic;
-using System.Linq;
+using Shop.Application.Products.Queries.GetProductList;
 using System.Threading.Tasks;
 
 namespace Shop.WebUI.Controllers
@@ -34,16 +27,13 @@ namespace Shop.WebUI.Controllers
             _mapper = mapper;
         }
 
-        //[HttpGet]
-        //public async Task<ProductVm> Get()
-        //{
-        //    return new ProductVm()
-        //    {
-        //        ProductDtos = await _context.Products
-        //            .OrderBy(x => x.Id)
-        //            .ProjectTo<ProductDto>(_mapper.ConfigurationProvider).ToListAsync()
-        //    };
-        //}
+        [HttpGet]
+        public async Task<ProductVm> Get()
+        {
+
+            return await Mediator.Send(new GetProductListQuery());
+
+        }
 
         [HttpPost]
         public async Task<ActionResult<long>> Create([FromForm] CreateProductCommand command)

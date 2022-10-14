@@ -39,8 +39,16 @@
 
   <ItemGroup>
     <!-- Don't publish the SPA source files, but do show them in the project files list -->
+    <Compile Remove="ClientApp\src\features\category\CreateCategory\**" />
+    <Compile Remove="ClientApp\src\features\category\NewFolder\**" />
     <Content Remove="$(SpaRoot)**" />
+    <Content Remove="ClientApp\src\features\category\CreateCategory\**" />
+    <Content Remove="ClientApp\src\features\category\NewFolder\**" />
+    <EmbeddedResource Remove="ClientApp\src\features\category\CreateCategory\**" />
+    <EmbeddedResource Remove="ClientApp\src\features\category\NewFolder\**" />
     <None Remove="$(SpaRoot)**" />
+    <None Remove="ClientApp\src\features\category\CreateCategory\**" />
+    <None Remove="ClientApp\src\features\category\NewFolder\**" />
     <None Include="$(SpaRoot)**" Exclude="$(SpaRoot)node_modules\**" />
   </ItemGroup>
 
@@ -56,8 +64,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="ClientApp\src\features\category\CreateCategory\" />
-    <Folder Include="ClientApp\src\features\category\NewFolder\" />
     <Folder Include="wwwroot\api\" />
   </ItemGroup>
 

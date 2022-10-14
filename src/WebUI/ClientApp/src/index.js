@@ -3,21 +3,24 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { BrowserRouter } from 'react-router-dom';
 import App from './App';
-import configureStore from './app/store'
+import { store, persistor} from './app/store'
 import { Provider } from 'react-redux'
 import "./index.scss";
+import { PersistGate } from 'redux-persist/integration/react';
 
 //import registerServiceWorker from './registerServiceWorker';
 
 const baseUrl = document.getElementsByTagName('base')[0].getAttribute('href');
 const rootElement = document.getElementById('root');
-const store = configureStore()
 
 ReactDOM.render(
     <Provider store={store}>
+        <PersistGate loading={null} persistor={persistor}>
+
         <BrowserRouter basename={baseUrl}>
             <App />
-        </BrowserRouter>
+            </BrowserRouter>
+        </PersistGate>
     </Provider>,
     rootElement);
 

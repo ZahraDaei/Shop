@@ -1,9 +1,4 @@
-﻿using Shop.Application.Common.Models;
-using Shop.ModelDTO;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace Shop.Application.Categories.Queries.GetCategory
 {

@@ -2,8 +2,6 @@ import React, { Component } from 'react';
 import { Route } from 'react-router';
 import Layout from './Layout/Layout';
 import Home from './Home/Home';
-import { FetchData } from './components/FetchData';
-import { Counter } from './components/Counter';
 import AuthorizeRoute from './components/api-authorization/AuthorizeRoute';
 import ApiAuthorizationRoutes from './components/api-authorization/ApiAuthorizationRoutes';
 import { ApplicationPaths } from './components/api-authorization/ApiAuthorizationConstants';
@@ -36,8 +34,6 @@ export default class App extends Component {
                 <Route exact path="/productdetail/:id" component={ProductDetail } />
                 <Route exact path="/checkout/cart" component={Cart } />
                 <Route exact path="/checkout/shipping" component={Shipping } />
-                <Route exact path='/counter' component={Counter} />
-                <AuthorizeRoute path='/fetch-data' component={FetchData} />
                 <Route path={ApplicationPaths.ApiAuthorizationPrefix} component={ApiAuthorizationRoutes} />
             </Layout>
         );

@@ -11,15 +11,28 @@ import monitorReducersEnhancer from './enhancers/monitorReducers'
 import loggerMiddleware from './middleware/logger'
 import rootReducer from './reducers'
 
+//import { configureStore } from "@reduxjs/toolkit";
+//import userReducer from "./slices/userSlice";
+import storage from 'redux-persist/lib/storage';
+import { persistReducer, persistStore } from 'redux-persist';
+import thunk from 'redux-thunk';
 
 
+const persistConfig = {
+    key: 'root',
+    storage,
+}
+
+const persistedReducer = persistReducer(persistConfig, rootReducer)
 
 export function* mainSaga(getState) {
     yield all([watchGetCategories(), watchGetProducts(), watchCreateCategories(), watchGetCategoriesTree(), watchCreateProduct()])
 
 }
 
-export default function configureStore(preloadedState) {
+export const store = configureStore()
+
+    function configureStore(preloadedState) {
 
     const sagaMiddleware = createSagaMiddleware()
 
@@ -30,8 +43,10 @@ export default function configureStore(preloadedState) {
   const enhancers = [middlewareEnhancer, monitorReducersEnhancer]
   const composedEnhancers = composeWithDevTools(...enhancers)
 
-  const store = createStore(rootReducer, preloadedState, composedEnhancers)
+    const store = createStore(persistedReducer, preloadedState, composedEnhancers)
     sagaMiddleware.run(mainSaga)
 
   return store
 }
+
+export const persistor = persistStore(store)
