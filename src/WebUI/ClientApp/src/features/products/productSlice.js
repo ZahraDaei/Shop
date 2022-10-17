@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit'
-import { products } from "../data";
+//import { products } from "../data";
 export const productSlice = createSlice({
     name: 'product',
     initialState: {
@@ -12,7 +12,7 @@ export const productSlice = createSlice({
     },
     reducers: {
         getProductById: (state, action) => {
-            state.selectedProduct = products.filter(p => p.id === +action.payload)[0];
+            state.selectedProduct = state.productList?.filter(p => p.id === +action.payload)[0];
             state.loadingProduct = false;
         },
         getProducts: (state, action) => {
@@ -22,7 +22,7 @@ export const productSlice = createSlice({
         }
         ,
         getProductsByCategory: (state, action) => {
-            state.productListByCategory = products.filter(x => { return x.categoryNames?.includes(action.payload) });
+            state.productListByCategory = state.productList?.filter(x => { return x.categoryName?.includes(action.payload) });
             state.loading = false;
 
         }

@@ -634,9 +634,12 @@
             "type": "string",
             "nullable": true
           },
-          "categoryName": {
-            "type": "string",
-            "nullable": true
+          "categoryNames": {
+            "type": "array",
+            "nullable": true,
+            "items": {
+              "type": "string"
+            }
           },
           "categoryId": {
             "type": "integer",

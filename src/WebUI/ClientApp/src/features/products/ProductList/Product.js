@@ -23,7 +23,7 @@ const Product = () => {
 
     useEffect(() => {
         dispatch({ type: 'CATEGORY_FETCH_START' });
-
+        dispatch({ type: 'PRODUCT_FETCH_START' });
     }, [])
 
 

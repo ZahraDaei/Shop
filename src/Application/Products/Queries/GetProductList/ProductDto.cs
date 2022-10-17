@@ -1,5 +1,7 @@
-﻿using Shop.Application.Common.Mappings;
+﻿using AutoMapper;
+using Shop.Application.Common.Mappings;
 using Shop.Domain.Entities;
+using System.Collections.Generic;
 
 namespace Shop.Application.Products.Queries.GetProductList
 {
@@ -13,7 +15,9 @@ namespace Shop.Application.Products.Queries.GetProductList
         public string FarsiName { get; set; }
         public decimal Price { get; set; }
         public string Image { get; set; }
-        public string CategoryName { get; set; }
+        //public ICollection<CategoryName> CategoryNames { get; set; }
+        public string[] CategoryNames { get; set; }
         public long CategoryId { get; set; }
+
     }
 }

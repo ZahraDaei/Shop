@@ -33,12 +33,27 @@ namespace Shop.Application.Products.Queries.GetProductList
             try
             {
 
-                return new ProductVm()
+                var productVm = new ProductVm()
                 {
                     ProductDtos = await _context.Products
                         .OrderBy(x => x.Id)
                         .ProjectTo<ProductDto>(_mapper.ConfigurationProvider).ToListAsync()
                 };
+
+                var categoryNameList = new List<string>();
+
+
+                foreach (var item in productVm.ProductDtos)
+                {
+                    var cat = await _context.Categories.Where(c => c.Id == item.CategoryId).FirstOrDefaultAsync();
+                    categoryNameList.Add(cat.Name);
+                    if (cat.ParentId!=0)
+                    {
+
+                    }
+                }
+
+                return productVm;
 
             }
             catch (Exception e)

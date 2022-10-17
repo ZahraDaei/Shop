@@ -15,7 +15,7 @@ function* fetchProduct() {
     try {
         const products = yield call(fetchProducts);
         yield put({ type: "PRODUCT_FETCH_SUCCEEDED" });
-        yield put({ type: "product/getProducts", payload: products.productDto });
+        yield put({ type: "product/getProducts", payload: products.productDtos });
     } catch (e) {
         yield put({ type: "PRODUCT_FETCH_FAILED", message: e.message });
     }

@@ -79,7 +79,8 @@ export default function CreateProduct() {
        // data.specifications = data.specifications.map(item=>item=item.specificationKey)
          dispatch({ type: 'PRODUCT_CREATE_START', payload: data });
           methods.reset();
-           setFile(null);
+        setFile(null);
+        setSpecifications([]);
     };
 
 

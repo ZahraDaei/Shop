@@ -1079,7 +1079,7 @@ export class ProductDto implements IProductDto {
     farsiName?: string | undefined;
     price?: number;
     image?: string | undefined;
-    categoryName?: string | undefined;
+    categoryNames?: string[] | undefined;
     categoryId?: number;
 
     constructor(data?: IProductDto) {
@@ -1101,7 +1101,11 @@ export class ProductDto implements IProductDto {
             this.farsiName = _data["farsiName"];
             this.price = _data["price"];
             this.image = _data["image"];
-            this.categoryName = _data["categoryName"];
+            if (Array.isArray(_data["categoryNames"])) {
+                this.categoryNames = [] as any;
+                for (let item of _data["categoryNames"])
+                    this.categoryNames!.push(item);
+            }
             this.categoryId = _data["categoryId"];
         }
     }
@@ -1123,7 +1127,11 @@ export class ProductDto implements IProductDto {
         data["farsiName"] = this.farsiName;
         data["price"] = this.price;
         data["image"] = this.image;
-        data["categoryName"] = this.categoryName;
+        if (Array.isArray(this.categoryNames)) {
+            data["categoryNames"] = [];
+            for (let item of this.categoryNames)
+                data["categoryNames"].push(item);
+        }
         data["categoryId"] = this.categoryId;
         return data; 
     }
@@ -1138,7 +1146,7 @@ export interface IProductDto {
     farsiName?: string | undefined;
     price?: number;
     image?: string | undefined;
-    categoryName?: string | undefined;
+    categoryNames?: string[] | undefined;
     categoryId?: number;
 }
 
