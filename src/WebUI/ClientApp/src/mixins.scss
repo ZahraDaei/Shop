@@ -17,6 +17,19 @@
   }
 }
 
+
+@mixin shower($height,$width){
+  display: block;
+  position: absolute;
+  border: 1px solid #e0d6d6;
+  border-radius: 5px;
+  padding: 10px;
+  z-index: 1000;
+  top: 40px;  
+  background-color: white;
+  min-height: $height;
+  min-width: $width;
+}
 @mixin radious($radious:5px) {
   border-radius: $radious;
 }

@@ -1,9 +1,24 @@
 @import "mixins";
+@import "~bootstrap/scss/bootstrap";
 
 a{
   text-decoration: none!important;
-  color:green!important;
+  color:#808081 !important;
   
+}
+
+//Layout
+
+@mixin box-with-border{
+  padding:5px 10px;
+  border:1px solid #e0e0e2;
+  border-radius: 5px;
+
+}
+
+.loginBox{
+  @include box-with-border;
+  margin-left:30px;
 }
 
 .categorySteps{}
@@ -12,6 +27,16 @@ a{
   content: url(./Icons/Arrow-down.svg);
 
 }
+
+
+.pipe{
+  border-right:1px solid  #e0e0e2;
+}
+
+.pointer{
+  cursor: pointer;
+}
+
 
 
 .inputBox {
@@ -116,13 +141,13 @@ font-size: 16px;
 }
 
 .shoppingCartProduct{
-  @include border();
-  @include radious();
+ 
 }
 
 .productCart{
-  @include border("bottom");
-  
+  @include border();
+  padding:20px 20px 50px 20px;
+  margin-bottom:10px;
 }
 
 .shoppingCartImg{
@@ -157,6 +182,8 @@ font-size: 16px;
 .radious{
   @include radious();
 }
+
+
 
 
 .connectPink{}

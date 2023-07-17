@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using Shop.Application.ProductCategories.Queries.GetProductCategory;
 using Shop.Application.Products.Commands.CreateProduct;
 using Shop.Application.Products.Queries.GetProductList;
 using System.Threading.Tasks;
@@ -15,20 +16,25 @@ namespace Shop.WebUI.Controllers
 
 
         private readonly ILogger<ProductController> _logger;
-       // private readonly IApplicationDbContext _context;
         private readonly IMapper _mapper;
 
         public ProductController(ILogger<ProductController> logger,
-            //IApplicationDbContext context,
             IMapper mapper)
         {
             _logger = logger;
-          //  _context = context;
             _mapper = mapper;
         }
 
-        [HttpGet]
-        public async Task<ProductVm> Get()
+        [HttpGet("GetProductCategoryList")]
+        public async Task<ProductCategoryVm> GetProductCategoryList()
+        {
+
+            return await Mediator.Send(new GetProductCategoryListQuery());
+
+        }
+        
+        [HttpGet("ProductList")]
+        public async Task<ProductVm> Getlist()
         {
 
             return await Mediator.Send(new GetProductListQuery());

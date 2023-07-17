@@ -3,6 +3,10 @@ import { NavItem, NavLink } from 'reactstrap';
 import { Link } from 'react-router-dom';
 import authService from './AuthorizeService';
 import { ApplicationPaths } from './ApiAuthorizationConstants';
+import { TbLogin } from "react-icons/tb";
+import { RiArrowDropDownFill } from "react-icons/ri";
+import { HiOutlineUser } from "react-icons/hi";
+import { TbLogout } from "react-icons/tb";
 
 export class LoginMenu extends Component {
     constructor(props) {
@@ -44,26 +48,85 @@ export class LoginMenu extends Component {
         }
     }
 
+    // authenticatedView(userName, profilePath, logoutPath) {
+    //     return (<Fragment>
+    //         <NavItem>
+    //             <NavLink tag={Link} className="text-dark" to={profilePath}>Hello {userName}</NavLink>
+    //         </NavItem>
+    //         <NavItem>
+    //             <NavLink tag={Link} className="text-dark" to={logoutPath}>Logout</NavLink>
+    //         </NavItem>
+    //     </Fragment>);
+
+    // }
+
+    // anonymousView(registerPath, loginPath) {
+    //     return (<Fragment>
+    //         <NavItem>
+    //             <NavLink tag={Link} className="text-dark" to={registerPath}>Register</NavLink>
+    //         </NavItem>
+    //         <NavItem>
+    //             <NavLink tag={Link} className="text-dark" to={loginPath}>Login</NavLink>
+    //         </NavItem>
+    //     </Fragment>);
+    // }
     authenticatedView(userName, profilePath, logoutPath) {
-        return (<Fragment>
-            <NavItem>
-                <NavLink tag={Link} className="text-dark" to={profilePath}>Hello {userName}</NavLink>
-            </NavItem>
-            <NavItem>
-                <NavLink tag={Link} className="text-dark" to={logoutPath}>Logout</NavLink>
-            </NavItem>
-        </Fragment>);
+        return (
+            <Fragment>
+                <span className="pointer profileShower">
+                    {" "}
+                    <HiOutlineUser size={20} />
+                    <RiArrowDropDownFill size={20} />
+                </span>
+                <div className="hideProfile">
+
+                    <div style={{ display: "flex", flexDirection: "column" }}>
+                        <Link to="/profile">{userName}</Link>
+                        <span className="pointer">
+                            {" "}
+                            <TbLogout className="ml-1" size={20} />
+                            <Link to={logoutPath}>خروج از حساب کاربری</Link>
+                        </span>
+                    </div>
+
+                </div>
+            </Fragment>
+        );
 
     }
 
+    // {userAuthentication ? (<>
+    //   <span className="pointer profileShower">
+    //     {" "}
+    //     <HiOutlineUser size={20} />
+    //     <RiArrowDropDownFill size={20} />
+    //   </span>
+    //   <div className="hideProfile">
+    //     {!loadingUser?<div style={{ display: "flex", flexDirection: "column" }}>
+    //       <Link to="/profile">{user.userName}</Link>
+    //       <Link to={ApplicationPaths.LogOut}>خروج از حساب کاربری</Link>
+    //     </div>:null}
+    //   </div>
+    // </>
+    // ) : (
+    //   <div className="loginBox  flex_row">
+    //     <TbLogin size={25} />
+    //     <div className="mr-1">
+    //       <Link to={ApplicationPaths.Login}>ورود | ثبت نام</Link>
+    //     </div>
+    //   </div>
+    // )}
+
+
+
     anonymousView(registerPath, loginPath) {
         return (<Fragment>
-            <NavItem>
-                <NavLink tag={Link} className="text-dark" to={registerPath}>Register</NavLink>
-            </NavItem>
-            <NavItem>
-                <NavLink tag={Link} className="text-dark" to={loginPath}>Login</NavLink>
-            </NavItem>
+            <div className="loginBox  flex_row">
+                <TbLogin size={25} />
+                <div className="mr-1">
+                    <Link to={loginPath}>ورود | ثبت نام</Link>
+                </div>
+            </div>
         </Fragment>);
     }
 }

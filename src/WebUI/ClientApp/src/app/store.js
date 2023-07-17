@@ -4,9 +4,11 @@ import createSagaMiddleware from 'redux-saga'
 import { all } from 'redux-saga/effects'
 import thunkMiddleware from 'redux-thunk'
 import { watchGetCategories, watchGetCategoriesTree} from '../features/category/meta/saga'
-import { watchGetProducts } from '../features/products/meta/saga'
+import { watchGetProducts, watchGetProductCategoryList} from '../features/products/meta/saga'
+import { watchGetUser} from '../features/user/meta/saga'
 import { watchCreateCategories} from '../features/AdminPanel/Category/meta/saga'
 import { watchCreateProduct} from '../features/AdminPanel/product/meta/saga'
+import { watchGetAddresses} from '../features/user/meta/saga'
 import monitorReducersEnhancer from './enhancers/monitorReducers'
 import loggerMiddleware from './middleware/logger'
 import rootReducer from './reducers'
@@ -26,7 +28,10 @@ const persistConfig = {
 const persistedReducer = persistReducer(persistConfig, rootReducer)
 
 export function* mainSaga(getState) {
-    yield all([watchGetCategories(), watchGetProducts(), watchCreateCategories(), watchGetCategoriesTree(), watchCreateProduct()])
+    yield all([watchGetCategories(), watchGetProducts(),
+        watchCreateCategories(), watchGetCategoriesTree(),
+        watchCreateProduct(), watchGetProductCategoryList(),
+        watchGetUser(),watchGetAddresses()])
 
 }
 

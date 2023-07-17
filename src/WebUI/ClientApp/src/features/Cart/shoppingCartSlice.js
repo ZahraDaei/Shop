@@ -6,7 +6,8 @@ export const shoppingCartSlice = createSlice({
         shoppingCartProducts: [],
         total: 0,
         user: null,
-        counts: 0
+        counts: 0,
+        selectedAddress:null
     },
     reducers: {
         addShoppingCart: (state, action) => {
@@ -47,11 +48,14 @@ export const shoppingCartSlice = createSlice({
         },
         addUser: (state, action) => {
             state.user = action.payload
+        },
+        optShippingAddress: (state, action) => {
+            state.selectedAddress = action.payload
         }
     },
 });
 
-export const { addShoppingCart, removeShoppingCart } =
+export const { addShoppingCart, removeShoppingCart, addUser, optShippingAddress } =
     shoppingCartSlice.actions;
 
 export default shoppingCartSlice.reducer;
@@ -67,3 +71,6 @@ export const selectTotal = (state) =>
 
 export const selectUser = (state) =>
     state.shoppingCart.user;
+
+export const selectShippingAddress = (state) =>
+    state.shoppingCart.selectedAddress

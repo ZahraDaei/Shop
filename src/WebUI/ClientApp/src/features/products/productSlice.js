@@ -6,8 +6,11 @@ export const productSlice = createSlice({
         productList: [],
         selectedProduct: {},
         productListByCategory: [],
+        allProductCategoryList: [],
+        loadingProductCategoryList:true,
         loadingProduct: true,
-        loading:true
+        loadingProducts:true,
+        loading: true
 
     },
     reducers: {
@@ -16,13 +19,15 @@ export const productSlice = createSlice({
             state.loadingProduct = false;
         },
         getProducts: (state, action) => {
-               state.productList = action.payload
-            //state.productList = products;
-            state.loading = false;
-        }
-        ,
+            state.productList = action.payload
+            state.loadingProducts = false;
+        },
+        getAllProductCategoryList: (state, action) => {
+            state.allProductCategoryList = action.payload
+            state.loadingProductCategoryList=false
+        },
         getProductsByCategory: (state, action) => {
-            state.productListByCategory = state.productList?.filter(x => { return x.categoryName?.includes(action.payload) });
+            state.productListByCategory = state.allProductCategoryList?.filter(x => x.categoryName === action.payload);
             state.loading = false;
 
         }
@@ -38,8 +43,10 @@ export default productSlice.reducer
 // the state. Selectors can also be defined inline where they're used instead of
 // in the slice file. For example: `useSelector((state) => state.counter.value)`
 export const selectProducts = state => state.products.productList;
+export const selectAllProductCategoryList = state => state.products.allProductCategoryList;
 export const selectProductByCategory = state => state.products.productListByCategory;
 export const selectProductById = state => state.products.selectedProduct;
 
 export const selectLoading = state => state.products.loading;
 export const selectLoadingProduct = state => state.products.loadingProduct;
+export const selectLoadingProductCategoryList = state => state.products.loadingProductCategoryList;

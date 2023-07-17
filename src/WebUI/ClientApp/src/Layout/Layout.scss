@@ -1,0 +1,114 @@
+@import "../mixins.scss";
+
+
+.footer {
+    position: relative;
+    height: auto;
+    width: 100%;
+    display: flex;
+    /* align-items: center;
+    justify-content: center; */
+    overflow: hidden;
+}
+
+.categoryShower {
+    position: relative;
+}
+
+.hideBox {
+    display: none;
+}
+
+
+
+.subCat {
+    display: flex;
+    flex-direction:column;
+    flex-wrap:wrap;
+    line-height:10px;
+    position: absolute;
+    top: 10px;
+    right: 100px;
+    width: 300px;
+    overflow: hidden;
+    height: 390px;
+}
+.firstChild {
+    font-weight: bold;
+    color: black;
+}
+
+    .firstChild::before {
+        content: "|";
+        color: red;
+        font-weight: bold;
+    }
+
+    .categoryRoot {
+        position: relative;
+        max-width: 90px;
+    }
+
+        .categoryRootHover {
+            background-color: #e0d6d6;
+        }
+
+
+.hideCategory {
+    display: none;
+}
+
+    .hideCategory:hover {
+        @include shower(400px,400px);
+       
+    }
+
+.categoryShower:hover + .hideCategory {
+    @include shower(400px,400px);
+   
+}
+
+.profileShower {
+    position: relative;
+}
+.hideProfile {
+    display: none;
+}
+
+    .hideProfile:hover {
+        @include shower(200px,150px);
+        left:30px;
+       
+    }
+
+.profileShower:hover + .hideProfile {
+    @include shower(200px,150px);
+    left:30px;
+   
+}
+
+.footer::before {
+    content: "";
+    background-image: url('./image4.jpg');
+    background-size: cover;
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    bottom: 0px;
+    left: 0px;
+    opacity: 0.4;
+    height: 300px;
+}
+
+.footer div {
+    position: relative;
+    color: black;
+}
+
+.links li a {
+    text-decoration: none;
+}
+
+
+
+  

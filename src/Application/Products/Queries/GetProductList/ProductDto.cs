@@ -15,9 +15,9 @@ namespace Shop.Application.Products.Queries.GetProductList
         public string FarsiName { get; set; }
         public decimal Price { get; set; }
         public string Image { get; set; }
-        //public ICollection<CategoryName> CategoryNames { get; set; }
-        public string[] CategoryNames { get; set; }
         public long CategoryId { get; set; }
+        public IEnumerable<KeyValueSpecification> Specifications { get; set; }
+
 
     }
 }

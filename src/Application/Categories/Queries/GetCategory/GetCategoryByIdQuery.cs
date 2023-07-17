@@ -35,7 +35,7 @@ namespace Shop.Application.Categories.Queries.GetCategory
             try
             {
 
-               var categoryDto = await _context.Categories.OrderBy(x => x.Id)
+               var categoryDto = await _context.Categories.Where(c=>c.Id==request.CategoryId)
                             .ProjectTo<CategoryDto>(_mapper.ConfigurationProvider).FirstOrDefaultAsync();
                
 

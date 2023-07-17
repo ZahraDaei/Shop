@@ -12,7 +12,7 @@ const rootReducer=combineReducers({
     shoppingCart: shoppingCartReducer,
     products: productReducer,
     user:userReducer,
-    addresses: addressReducer,
+    address: addressReducer,
     category: categoryReducer,
     alert:alertReducer
   

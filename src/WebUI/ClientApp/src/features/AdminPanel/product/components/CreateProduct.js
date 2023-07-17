@@ -86,9 +86,6 @@ export default function CreateProduct() {
 
     const dispatch = useDispatch()
 
-
-
-
     useEffect(() => {
         dispatch({ type: "CATEGORY_TREE_FETCH_START" })
         dispatch({ type: "CATEGORY_FETCH_START" })

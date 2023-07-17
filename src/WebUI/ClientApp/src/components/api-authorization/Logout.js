@@ -48,6 +48,7 @@ export class Logout extends Component {
             return <div></div>
         }
         if (!!message) {
+            window.location.href=`${window.location.origin}`
             return (<div>{message}</div>);
         } else {
             const action = this.props.action;
@@ -57,6 +58,7 @@ export class Logout extends Component {
                 case LogoutActions.LogoutCallback:
                     return (<div>Processing logout callback</div>);
                 case LogoutActions.LoggedOut:
+                    window.location.href=`${window.location.origin}`
                     return (<div>{message}</div>);
                 default:
                     throw new Error(`Invalid action '${action}'`);
@@ -83,6 +85,7 @@ export class Logout extends Component {
             }
         } else {
             this.setState({ message: "You successfully logged out!" });
+           
         }
     }
 

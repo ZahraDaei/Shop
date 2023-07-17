@@ -1,4 +1,5 @@
 ﻿using Shop.Application.Common.Models;
+using Shop.Application.Users.Queries.GetUser;
 using System.Threading.Tasks;
 
 namespace Shop.Application.Common.Interfaces
@@ -6,6 +7,7 @@ namespace Shop.Application.Common.Interfaces
     public interface IIdentityService
     {
         Task<string> GetUserNameAsync(string userId);
+        Task<UserDto> GetUserAsync(string userId);
 
         Task<bool> IsInRoleAsync(string userId, string role);
 

@@ -19,7 +19,7 @@ const ProductDetail = (props) => {
   useEffect(() => {
     dispatch(getProductById(id));
   }, [id]);
-  if (loading) {
+    if (loading ) {
     return <div className="centerBox">در حال بارگزاری ...</div>;
   } else {
     return (
@@ -27,7 +27,7 @@ const ProductDetail = (props) => {
         <Row style={{ padding: "0 40px" }}>
           <Col sm={12} lg={4}>
             <img
-              src={product.image}
+              src={`/images/${product.image}`}
               alt="MISSING JPG"
               style={{ maxWidth: "100%" }}
             />

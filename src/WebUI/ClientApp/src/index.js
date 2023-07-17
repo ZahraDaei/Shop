@@ -1,4 +1,4 @@
-import 'bootstrap/dist/css/bootstrap.css';
+
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { BrowserRouter } from 'react-router-dom';
@@ -7,6 +7,11 @@ import { store, persistor} from './app/store'
 import { Provider } from 'react-redux'
 import "./index.scss";
 import { PersistGate } from 'redux-persist/integration/react';
+import 'react-bootstrap-table-next/dist/react-bootstrap-table2.min.css';
+import 'react-bootstrap-table2-paginator/dist/react-bootstrap-table2-paginator.min.css';
+import './custom.css'
+import './App.scss'
+import 'bootstrap/dist/css/bootstrap.css';
 
 //import registerServiceWorker from './registerServiceWorker';
 

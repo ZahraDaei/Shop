@@ -11,6 +11,6 @@ namespace Shop.Domain.Entities
         public string SpecificationKey { get; set; }
         public long CategoryId { get; set; }
         public Category Category { get; set; }
-        public ICollection<ProductSpecification> ProductSpecifications { get; set; }
+       // public ICollection<ProductSpecification> ProductSpecifications { get; set; }
     }
 }

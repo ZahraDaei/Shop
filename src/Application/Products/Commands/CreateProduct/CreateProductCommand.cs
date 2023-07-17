@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json;
 using Shop.Application.Categories.Queries.GetCategory;
 using Shop.Application.Common.Interfaces;
+using Shop.Application.Common.Models;
 using Shop.Domain.Entities;
 using System.Collections.Generic;
 using System.Linq;
@@ -49,26 +50,25 @@ namespace Shop.Application.Products.Commands.CreateProduct
                 Name = request.Name,
                 Price = request.Price,
                 ShortDescription = request.ShortDescription,
+                CategoryId = request.CategoryId
             };
 
             _context.Products.Add(entity);
             await _context.SaveChangesAsync(cancellationToken);
-            var category = await _mediator.Send(new GetCategoryByIdQuery() { CategoryId = request.CategoryId });
-            _context.ProductCategories.Add(new ProductCategory() { CategoryId = category.Id, ProductId = entity.Id });
-
-            var parentId = category.ParentId;
 
             var catEnumerable = await _mediator.Send(new GetCategoryListQuery());
-            var catList = catEnumerable.CategoryDtos.ToList();
-            for (int i = 0; i < catList.Count; i++)
+
+            var catList = new List<CategoryDto>();
+            catEnumerable.CategoryDtos
+                .GetAllCategorySeries(c => c.Id, c => c.ParentId, catList, request.CategoryId);
+
+
+            foreach (var item in catList)
             {
-                var item = catList[i];
-                if (item.Id == parentId)
-                {
-                    _context.ProductCategories.Add(new ProductCategory() { CategoryId = item.Id, ProductId = entity.Id });
-                    parentId = item.ParentId;
-                }
+                _context.ProductCategories.Add(new ProductCategory() { CategoryId = item.Id, ProductId = entity.Id });
+
             }
+
 
             List<ProductSpecificationKeyValue> specs =
                JsonConvert.DeserializeObject<List<ProductSpecificationKeyValue>>(request.ProductSpecifications);

@@ -28,7 +28,7 @@ const Category = () => {
                                 {category.map((item, index) => {
                                     return (
                                         <div key={index}>
-                                            <Link to={`/${item.name}`}>
+                                            <Link to={`/search/${item.name}`}>
                                                 <div style={{ display: "flex", flexDirection: "column" }}>
                                                     <img width="60px" height="60px" src={`data:image/jpeg;base64,${item.content}`} />
                                                     <span>{item.farsiName}</span>

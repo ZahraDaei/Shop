@@ -1,10 +1,8 @@
 import React from 'react'
-import PropTypes from 'prop-types'
-import { NavItem } from 'react-bootstrap'
-import {useDispatch,useSelector} from "react-redux"
-import {addShoppingCart,removeShoppingCart} from "../shoppingCartSlice"
+import { useDispatch } from "react-redux"
+import { addShoppingCart, removeShoppingCart } from "../shoppingCartSlice"
 //import { ReactSVG } from 'react-svg'
-import { ImBin } from 'react-icons/im';
+import { ImBin } from 'react-icons/im'
 
 
 const CartNumber = ({item}) => {

@@ -7,13 +7,13 @@ const Basket = ({shoppingCartProducts}) => {
       <>
     {shoppingCartProducts.map((item, i) => {
         return (
-          <div className="productCart d-flex flex-row p-4">
+          <div className="productCart d-flex flex-row ">
             <div className="shoppingCartImg">
-              <img className="imgWidth mt-2" src={item.product.image} />
+              <img className="imgWidth mt-2" src={`/images/${item.product.image}`} />
               <CartNumber item={item} />
             </div>
             <div className=" p-3">
-              <span>{item.product.name}</span>
+              <span>{item.product.farsiName}</span>
               <ul>
                 {item.product.specifics?.map((item, i) => (
                   <li key={i}>

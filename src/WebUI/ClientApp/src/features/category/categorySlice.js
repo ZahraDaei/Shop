@@ -16,16 +16,16 @@ export const categorySlice = createSlice({
         getCategories: (state, action) => {
             state.categoryList = action.payload; state.loading=false },
         getSubCategories: (state, action) => {
-            var parent = state.categoryList.filter(c => c.name == action.payload);
-            console.log("ppp", parent)
-            state.subCategory = state.categoryList.filter(c => c.parentId == parent[0].id);
+           var parent = state.categoryList.filter(c => c.name == action.payload);
+           console.log("ppp", parent)
+           state.subCategory = state.categoryList.filter(c => c.parentId == parent[0].id);
         },
       
            
     }
 })
 
-export const { getCategories, getSubCategories, getCategoriesTree } = categorySlice.actions
+export const { getCategories, getCategoriesTree ,getSubCategories} = categorySlice.actions
 
 export default categorySlice.reducer
 

@@ -3,6 +3,7 @@ using AutoMapper.QueryableExtensions;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Shop.Application.Common.Interfaces;
+using Shop.Application.Common.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,12 +18,12 @@ namespace Shop.Application.Products.Queries.GetProductList
     {
     }
 
-    public class GetCategoriesQueryHandler : IRequestHandler<GetProductListQuery, ProductVm>
+    public class GetProductListQueryHandler : IRequestHandler<GetProductListQuery, ProductVm>
     {
         private readonly IApplicationDbContext _context;
         private readonly IMapper _mapper;
 
-        public GetCategoriesQueryHandler(IApplicationDbContext context, IMapper mapper)
+        public GetProductListQueryHandler(IApplicationDbContext context, IMapper mapper)
         {
             _context = context;
             _mapper = mapper;
@@ -33,28 +34,52 @@ namespace Shop.Application.Products.Queries.GetProductList
             try
             {
 
-                var productVm = new ProductVm()
-                {
-                    ProductDtos = await _context.Products
-                        .OrderBy(x => x.Id)
-                        .ProjectTo<ProductDto>(_mapper.ConfigurationProvider).ToListAsync()
-                };
-
-                var categoryNameList = new List<string>();
+                var productDtos = await _context.Products.ToListAsync();
 
 
-                foreach (var item in productVm.ProductDtos)
-                {
-                    var cat = await _context.Categories.Where(c => c.Id == item.CategoryId).FirstOrDefaultAsync();
-                    categoryNameList.Add(cat.Name);
-                    if (cat.ParentId!=0)
-                    {
+                var productVm = new ProductVm();
+                var product_category = await _context.ProductCategories.ToListAsync();
 
-                    }
-                }
+                var products = await _context.Products.ToListAsync();
+                var categories = await _context.Categories.ToListAsync();
+                var product_specifications = await _context.ProductSpecifications.ToListAsync();
+                var specification = await _context.Specifications.ToListAsync();
+
+                var joined_product_specification = from ps in product_specifications
+                                                   join s in specification on ps.SpecificationId equals s.Id
+                                                   select new
+                                                   {
+                                                       ProductId = ps.ProductId,
+                                                       Specification = new KeyValueSpecification() { Key = s.SpecificationKey, Value = ps.SpecificationValue },
+
+                                                   };
+
+                var grouped_product_specification = from jps in joined_product_specification
+                                                    group jps.Specification by jps.ProductId into g
+                                                    select new
+                                                    { ProductId = g.Key, Specification = g.ToList() };
+
+                productVm.ProductDtos = from p in products
+                                        join gps in grouped_product_specification on p.Id equals gps.ProductId
+
+                                        select new ProductDto
+                                        {
+                                            BrandName = p.BrandName,
+                                            Id = p.Id,
+                                            Name = p.Name,
+                                            FarsiName = p.FarsiName,
+                                            Description = p.Description,
+                                            Image = p.Image,
+                                            Price = p.Price,
+                                            ShortDescription = p.ShortDescription,
+                                            Specifications = gps.Specification,
+                                            CategoryId=p.CategoryId,
+                                        };
+
+
+
 
                 return productVm;
-
             }
             catch (Exception e)
             {

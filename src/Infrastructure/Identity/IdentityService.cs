@@ -5,6 +5,8 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using System.Threading.Tasks;
+using Shop.Application.Users.Queries.GetUser;
+using Shop.Application.Common.Exceptions;
 
 namespace Shop.Infrastructure.Identity
 {
@@ -79,6 +81,22 @@ namespace Shop.Infrastructure.Identity
             var result = await _userManager.DeleteAsync(user);
 
             return result.ToApplicationResult();
+        }
+
+        public async Task<UserDto> GetUserAsync(string userId)
+        {
+            var user = await _userManager.Users.FirstAsync(u => u.Id == userId);
+            if (user==null)
+            {
+                throw new NotFoundException();
+            }
+            return new UserDto() {
+                Email=user.Email,
+                FirstName=user.FirstName,
+                LastName=user.LastName,
+                PhoneNumber=user.PhoneNumber,
+                UserName=user.UserName
+            };
         }
     }
 }
