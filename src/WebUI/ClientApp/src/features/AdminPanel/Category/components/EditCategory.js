@@ -4,13 +4,22 @@ import {
 
 import { yupResolver } from '@hookform/resolvers/yup';
 import { selectAlert } from "features/alert/alertSlice";
-import { selectCategoryList, selectCategoryById, selectLoadingCategory, selectLoading as categoryLoading, selectLoadingTree } from "features/category/categorySlice";
+import { selectCategoryById, selectCategoryList, selectLoading as categoryLoading, selectLoadingCategory, selectLoadingTree } from "features/category/categorySlice";
 
 import React, { useEffect, useState } from "react";
 import { Alert, Button, Container, Spinner } from "react-bootstrap";
-import { FormProvider, useForm } from "react-hook-form";
+import { Controller, FormProvider, useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
 import schema from "./schema";
+import Specification from "./Specification";
+
+import TreeView from '@mui/lab/TreeView';
+import { BsChevronLeft } from 'react-icons/bs';
+import { FcExpand } from 'react-icons/fc';
+import { selectCategoryTreeList } from "../../../category/categorySlice";
+import TreeItem from '@mui/lab/TreeItem';
+
+
 
 export default function EditCategory() {
     const queryParameters = new URLSearchParams(window.location.search)
@@ -19,7 +28,7 @@ export default function EditCategory() {
     const history = useHistory();
 
     useEffect(() => {
-        dispatch({ type: "alert/hideAlert" })
+        dispatch({ type: "alert/hideA'TreeView'lert" })
         dispatch({ type: "GET_CATEGORY_BY_ID_START", payload: id })
         //dispatch({ type: "CATEGORY_TREE_FETCH_START" })
         //dispatch({ type: "CATEGORY_FETCH_START" })
@@ -31,12 +40,7 @@ export default function EditCategory() {
     const [specifications, setSpecifications] = useState([]);
     const [content, setContent] = useState();
     const [show, setShow] = useState(false);
-    const handleClose = () => setShow(false);
-
-    const handleClick = () => {
-
-        setShow(true);
-    }
+  
 
 
     var catLoading = useSelector(selectLoadingTree);
@@ -59,6 +63,8 @@ export default function EditCategory() {
         }
     });
     var errors = methods.formState.errors;
+    const watchShowSpec = methods.watch("lastLevel", false);
+    var productCategories = useSelector(selectCategoryTreeList);
 
     const onSubmit = data => {
         data.id = category.id;
@@ -73,15 +79,19 @@ export default function EditCategory() {
 
     };
 
+    const renderTree = (nodes) => (
+        <TreeItem key={nodes.item.id} nodeId={nodes.item.id} label={nodes.item.farsiName}>
+            {Array.isArray(nodes.children)
+                ? nodes.children.map((node) => renderTree(node))
+                : null}
+        </TreeItem>
+    );
 
     const preventNonNumber = (e) => {
         if (!/^\d+$/.test(e.key))
             e.preventDefault();
     }
 
-    const DisplayCategory = () => {
-        return categoryList.filter(x => x.id == methods.getValues('productCategory'))[0]?.farsiName;
-    }
 
     useEffect(() => {
         if (catLoading || catListLoading || loading) {

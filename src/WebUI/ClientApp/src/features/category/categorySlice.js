@@ -48,5 +48,5 @@ export const selectCategoryList = state => state.category.categoryList;
 export const selectMainCategory = state => state.category.mainCategory;
 export const selectSubCategory = state => state.category.subCategory;
 export const selectCategoryById = state => state.category.selectedCategory;
-export const selectLoadingCategory = state => state.categroy.loadingCategory;
+export const selectLoadingCategory = state => state.category.loadingCategory;
 
