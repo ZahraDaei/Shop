@@ -9,7 +9,9 @@ export const categorySlice = createSlice({
         loadingTree: true,
         subCategory: [],
         mainCategory: [],
-        categoryTreeList:null
+        categoryTreeList: null,
+        selectedCategory: {},
+        loadingCategory:true
     },
     reducers: {
         getCategoriesTree: (state, action) => { state.categoryTreeList = action.payload; state.loadingTree=false },
@@ -17,15 +19,18 @@ export const categorySlice = createSlice({
             state.categoryList = action.payload; state.loading=false },
         getSubCategories: (state, action) => {
            var parent = state.categoryList.filter(c => c.name == action.payload);
-           console.log("ppp", parent)
            state.subCategory = state.categoryList.filter(c => c.parentId == parent[0].id);
         },
-      
+        getCategoryById: (state, action) => {
+            state.selectedCategory = action.payload;
+            state.loadingCategory = false;
+        },
+
            
     }
 })
 
-export const { getCategories, getCategoriesTree ,getSubCategories} = categorySlice.actions
+export const { getCategories, getCategoriesTree, getSubCategories, getCategoryById } = categorySlice.actions
 
 export default categorySlice.reducer
 
@@ -42,3 +47,6 @@ export const selectCategoryTreeList = state => state.category.categoryTreeList;
 export const selectCategoryList = state => state.category.categoryList;
 export const selectMainCategory = state => state.category.mainCategory;
 export const selectSubCategory = state => state.category.subCategory;
+export const selectCategoryById = state => state.category.selectedCategory;
+export const selectLoadingCategory = state => state.categroy.loadingCategory;
+

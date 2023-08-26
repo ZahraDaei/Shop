@@ -2,21 +2,17 @@ import React, { useEffect } from "react";
 import { Col, Row } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
+import {
+    getSubCategories
+} from "../../category/categorySlice";
 import Breadcrumbs from "../components/Breadcrumbs";
 import Category from "../components/Category";
 import "../Product.css";
+import {
+    selectLoadingProductCategoryList
+} from "../productSlice";
 import AdvanceSearch from "./AdvancedSearch/AdvanceSearch";
 import ProductList from "./components/ProductList";
-import {
-    getProductsAsync,
-    selectLoadingProductCategoryList,
-    getProductById,
-    getProductsByCategory,
-    selectProductByCategory,
-} from "../productSlice";
-import {
-    getSubCategories,
-} from "../../category/categorySlice";
 
 
 const Product = () => {

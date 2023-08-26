@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import ProductTable from "./components/ProductTable";
 import { Button, Spinner } from "react-bootstrap"
-import { selectLoading } from "../../products/productSlice";
+import { selectLoadingProducts } from "../../products/productSlice";
 import { useSelector, useDispatch } from "react-redux"
 import { Link } from "react-router-dom";
 import "./AdminProduct.css";
@@ -11,12 +11,14 @@ const AdminProduct = () => {
 
     useEffect(() => {
         dispatch({ type: 'PRODUCT_FETCH_START' });
+        dispatch({ type: 'CATEGORY_FETCH_START' });
+        dispatch({ type: 'PRODUCT_CATEGORY_LIST_FETCH_START' });
 
     }, [])
 
     const [content, setContent] = useState();
 
-    const loading = useSelector(selectLoading);
+    const loading = useSelector(selectLoadingProducts);
     useEffect(() => {
 
         if (loading) {

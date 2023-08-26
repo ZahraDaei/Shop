@@ -8,7 +8,7 @@ namespace Shop.Application.Common.Exceptions
     public class ValidationException : Exception
     {
         public ValidationException()
-            : base("One or more validation failures have occurred.")
+            : base("خطا در ارزیابی اطلاعات!")
         {
             Errors = new Dictionary<string, string[]>();
         }

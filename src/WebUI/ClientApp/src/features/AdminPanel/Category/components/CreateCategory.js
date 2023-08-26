@@ -1,4 +1,6 @@
-import { yupResolver } from '@hookform/resolvers/yup';
+import {
+    useHistory
+} from 'react-router-dom'; import { yupResolver } from '@hookform/resolvers/yup';
 import React, { useEffect, useState } from "react";
 import { Button, Container, Spinner, Alert } from "react-bootstrap";
 import { FormProvider, useForm, Controller } from "react-hook-form";
@@ -6,7 +8,7 @@ import { useDispatch, useSelector } from "react-redux";
 import * as yup from "yup";
 import { selectCategoryTreeList, selectLoadingTree } from "../../../category/categorySlice";
 import Specification from "./Specification";
-import { hideAlert, selectAlert } from "../../../alert/alertSlice"
+import { selectAlert } from "../../../alert/alertSlice"
 
 import TreeView from '@mui/lab/TreeView';
 import TreeItem from '@mui/lab/TreeItem';
@@ -15,6 +17,8 @@ import { BsChevronLeft } from 'react-icons/bs';
 
 
 export default function CreateCategory() {
+    const history = useHistory();
+
     const [file, setFile] = useState();
     const schema = yup.object().shape({
         name: yup
@@ -29,6 +33,7 @@ export default function CreateCategory() {
                 if (value.length)
                     return value[0].size <= 20000
             }),
+        firstLevel: yup.boolean(),
         lastLevel: yup.boolean(),
         specifications: yup
             .mixed()
@@ -49,7 +54,9 @@ export default function CreateCategory() {
 
 
     const onSubmit = data => {
-        console.log("ddddd",data)
+        if (data.parentId===undefined) {
+            data.parentId = 0;
+        }
         data.name = data.name.trim().toLowerCase();
         data.farsiName = data.farsiName.trim().toLowerCase();
         data.image = file;
@@ -66,10 +73,10 @@ export default function CreateCategory() {
 
 
     useEffect(() => {
+        dispatch({ type: "alert/hideAlert" })
         dispatch({ type: "CATEGORY_TREE_FETCH_START" })
 
         return () => {
-            hideAlert();
         }
     }, [])
 
@@ -77,7 +84,7 @@ export default function CreateCategory() {
 
     var productCategories = useSelector(selectCategoryTreeList);
     var loading = useSelector(selectLoadingTree);
-  
+
 
     //const renderTree = (nodes) => {
     //    return nodes.map(n =>
@@ -105,7 +112,7 @@ export default function CreateCategory() {
             setContent(<div style={{ display: "flex", alignItems: "center" }}><Spinner animation="border" variant="primary" /></div>)
         } else {
             setContent(
-                <div className="borderStyle formStyle" >
+                <div className="borderStyle formStyle w-50" >
                     <FormProvider {...methods} >
                         <form autoComplete="off" onSubmit={methods.handleSubmit(onSubmit, (e) => console.log(e))}>
                             <div className=" inputFlexBox" >
@@ -132,22 +139,27 @@ export default function CreateCategory() {
                             </div>
                             <div className="inputErrorStyle">  {errors?.image?.message}</div>
 
+                            <div className="mb-3">
+                                <label>در صورتی که دسته غیر اصلی تعریف می کنید در زیر دسته آن را انتخاب کنید در غیر این صورت دکمه ثبت را بزنید.</label>
+                            </div>
+
                             <div >
                                 <Controller
                                     name={"parentId"}
                                     control={methods.control}
                                     render={({ field: { onChange, value } }) => (
 
-                                <TreeView
-                                    aria-label="rich object"
-                                    defaultCollapseIcon={<FcExpand />}
-                                    defaultExpandIcon={<BsChevronLeft />}
-                                    onNodeSelect={(e, id) => onChange(id)}
-                                    sx={{ height: 110, flexGrow: 1, maxWidth: 400, overflowY: 'auto' }}
-                                >
-                                    {renderTree(productCategories)}
-                                </TreeView>
+                                        <TreeView
+                                            aria-label="rich object"
+                                            defaultCollapseIcon={<FcExpand />}
+                                            defaultExpandIcon={<BsChevronLeft />}
+                                            onNodeSelect={(e, id) => onChange(id)}
+                                            sx={{ height: 110, flexGrow: 1, maxWidth: 400, overflowY: 'auto' }}
+                                        >
+                                            {renderTree(productCategories)}
+                                        </TreeView>
                                     )}
+
                                 />
                             </div>
                             <div>
@@ -155,7 +167,9 @@ export default function CreateCategory() {
                                 <label>دسته بندی بعنوان پایین ترین سطح </label>
                                 {watchShowSpec && <Specification />}
                             </div>
-                            <Button style={{ float: "left", width: "100%", marginTop: "40px" }} type="submit" >ثبت</Button>
+
+                            <button type="submit" className="btn btn-primary" style={{ "float": "left", "width": "20%", "marginTop": "40px" }}>ثبت</button>
+                            <button type="button" onClick={history.goBack} className="btn btn-secondary" style={{ "float": "left", "width": "20%", "marginTop": "40px" }}>بازگشت</button>
                         </form>
                     </FormProvider>
                 </div>
@@ -167,9 +181,9 @@ export default function CreateCategory() {
             <Alert variant={useSelector(selectAlert).variant} show={Boolean(useSelector(selectAlert).variant)} >
                 <div>{useSelector(selectAlert).message}</div>
             </Alert>
-            <div style={{ display: "flex", justifyContent: "center" }}>
+            <div className="d-flex justify-content-center">
 
-                {content}
+                    {content}
             </div>
         </Container>
     );

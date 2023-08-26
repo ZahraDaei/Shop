@@ -13,7 +13,6 @@ namespace Shop.Application.Categories.Commands.CreateCategory
     {
         public string Name { get; set; }
         public string FarsiName { get; set; }
-        //public string Image { get; set; }
         public IFormFile ImageContent { get; set; }
         public long ParentId { get; set; }
         public string Specifications { get; set; }

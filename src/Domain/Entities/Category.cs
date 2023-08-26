@@ -12,6 +12,7 @@ namespace Shop.Domain.Entities
         public string Name { get; set; }
         public string FarsiName { get; set; }
         public string Image { get; set; }
+        public bool IsDeleted { get; set; }
         public long ParentId { get; set; }
         public byte[] Content { get; set; }
         public ICollection<ProductCategory> ProductCategories { get; set; }

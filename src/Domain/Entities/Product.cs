@@ -16,6 +16,7 @@ namespace Shop.Domain.Entities
         public decimal Price { get; set; }
         public string Image { get; set; }
         public long CategoryId { get; set; }
+        public bool IsDeleted { get; set; }
         public ICollection<CartProduct> CartProducts { get; set; }
         public ICollection<ProductSpecification> ProductSpecifications { get; set; }
         public ICollection<ProductCategory> ProductCategories { get; set; }

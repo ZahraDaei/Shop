@@ -2,6 +2,10 @@
     margin-bottom:20px;
 }*/
 
+.modal-content{
+    direction:rtl;
+}
+
 .grid-container {
     display: grid;
     grid-template-columns:auto 3fr;

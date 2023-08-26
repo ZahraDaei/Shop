@@ -8,6 +8,7 @@ using Shop.Application.Common.Interfaces;
 using Shop.Application.Common.Models;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Shop.Application.Products.Commands.CreateProduct;
 
 namespace Shop.WebUI.Controllers
 {
@@ -42,10 +43,34 @@ namespace Shop.WebUI.Controllers
             return await Mediator.Send(new GetCategoriesTreeQuery());
 
         }
+
+        [HttpGet("GetCategoryById")]
+        public async Task<CategoryDto> GetCategoryById(long id)
+        {
+
+            return await Mediator.Send(new GetCategoryByIdQuery() { CategoryId = id });
+
+        }
+
         [HttpPost]
         public async Task<ActionResult<long>> Create([FromForm] CreateCategoryCommand command)
         {
             return await Mediator.Send(command);
+        }
+
+        [HttpPut("UpdateCategory")]
+        public async Task<ActionResult<long>> Update([FromForm] UpdateCategoryCommand command)
+        {
+
+            return await Mediator.Send(command);
+        }
+
+        [HttpDelete("DeleteCategory")]
+        public async Task<ActionResult> SoftDelete(long id)
+        {
+
+            await Mediator.Send(new DeleteCategoryCommand() { Id = id });
+            return NoContent();
         }
     }
 }

@@ -67,6 +67,8 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="ClientApp\src\features\AdminPanel\product\components\NewFolder1\" />
+    <Folder Include="ClientApp\src\features\AdminPanel\product\components\NewFolder\" />
     <Folder Include="ClientApp\src\features\order\components\" />
     <Folder Include="wwwroot\api\" />
   </ItemGroup>

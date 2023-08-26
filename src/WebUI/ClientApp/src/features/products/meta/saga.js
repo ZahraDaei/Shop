@@ -34,6 +34,7 @@ export const fetchProductCategoryList = async () => {
 
 
 
+
 // Worker saga will be fired on USER_FETCH_REQUESTED actions
 function* fetchProductCategory() {
     try {
@@ -49,6 +50,31 @@ function* fetchProductCategory() {
 // Allows concurrent fetches of user
 export function* watchGetProductCategoryList() {
     yield takeEvery("PRODUCT_CATEGORY_LIST_FETCH_START", fetchProductCategory);
+}
+
+
+
+
+
+export const getProduct = async (payload) => {
+    var prod = new ProductClient();
+    return await prod.getProductById(payload);
+}
+// Worker saga will be fired on USER_FETCH_REQUESTED actions
+function* fetchProductById(action) {
+    try {
+        const product = yield call(getProduct,action.payload);
+        yield put({ type: "GET_PRODUCT_BY_ID_SUCCEEDED" });
+        yield put({ type: "product/getProductById", payload: product });
+    } catch (e) {
+        yield put({ type: "GET_PRODUCT_BY_ID_FAILED", message: e.message });
+    }
+}
+
+// Starts fetchUser on each dispatched USER_FETCH_REQUESTED action
+// Allows concurrent fetches of user
+export function* watchGetProductById() {
+    yield takeEvery("GET_PRODUCT_BY_ID_START", fetchProductById);
 }
 
 

@@ -61,7 +61,7 @@ namespace Shop.Application.Products.Queries.GetProductList
 
                 productVm.ProductDtos = from p in products
                                         join gps in grouped_product_specification on p.Id equals gps.ProductId
-
+                                        where p.IsDeleted==false
                                         select new ProductDto
                                         {
                                             BrandName = p.BrandName,

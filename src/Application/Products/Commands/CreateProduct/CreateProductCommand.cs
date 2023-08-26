@@ -1,15 +1,20 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using Shop.Application.Categories.Queries.GetCategory;
+using Shop.Application.Common.Exceptions;
 using Shop.Application.Common.Interfaces;
 using Shop.Application.Common.Models;
 using Shop.Domain.Entities;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 namespace Shop.Application.Products.Commands.CreateProduct
 {
@@ -32,15 +37,36 @@ namespace Shop.Application.Products.Commands.CreateProduct
     {
         private readonly IApplicationDbContext _context;
         private readonly IMediator _mediator;
+        private readonly IWebHostEnvironment _hostingEnvironment;
 
-        public CreateProductCommandHandler(IApplicationDbContext context, IMediator mediator)
+        public CreateProductCommandHandler(IApplicationDbContext context, IMediator mediator, IWebHostEnvironment environment)
         {
             _context = context;
             _mediator = mediator;
+            _hostingEnvironment = environment;
         }
 
         public async Task<long> Handle(CreateProductCommand request, CancellationToken cancellationToken)
         {
+
+            var product = await _context.Products.FirstOrDefaultAsync(x => x.Name == request.Name);
+            if (product!=null)
+            {
+                var err = new ValidationException();
+                err.Errors.Add("محصول",new string[] { "تکراری" });
+                throw err;
+            }
+            string images = Path.Combine(_hostingEnvironment.WebRootPath, "images");
+            var file = request.Image;
+            if (file.Length > 0)
+            {
+                string filePath = Path.Combine(images, file.FileName);
+                using (Stream fileStream = new FileStream(filePath, FileMode.Create))
+                {
+                    await file.CopyToAsync(fileStream);
+                }
+            }
+
             var entity = new Product()
             {
                 BrandName = request.BrandName,

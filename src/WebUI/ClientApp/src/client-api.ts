@@ -252,6 +252,46 @@ export class CategoryClient extends BaseClass {
         return Promise.resolve<TreeItemOfCategoryDto[]>(<any>null);
     }
 
+    getCategoryById(id: number | undefined): Promise<CategoryDto> {
+        let url_ = this.baseUrl + "/Category/GetCategoryById?";
+        if (id === null)
+            throw new Error("The parameter 'id' cannot be null.");
+        else if (id !== undefined)
+            url_ += "id=" + encodeURIComponent("" + id) + "&";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ = <RequestInit>{
+            method: "GET",
+            headers: {
+                "Accept": "application/json"
+            }
+        };
+
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response: Response) => {
+            return this.processGetCategoryById(_response);
+        });
+    }
+
+    protected processGetCategoryById(response: Response): Promise<CategoryDto> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = CategoryDto.fromJS(resultData200);
+            return result200;
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<CategoryDto>(<any>null);
+    }
+
     create(name: string | null | undefined, farsiName: string | null | undefined, imageContent: FileParameter | null | undefined, parentId: number | undefined, specifications: string | null | undefined): Promise<number> {
         let url_ = this.baseUrl + "/Category";
         url_ = url_.replace(/[?&]$/, "");
@@ -301,6 +341,99 @@ export class CategoryClient extends BaseClass {
             });
         }
         return Promise.resolve<number>(<any>null);
+    }
+
+    update(id: number | undefined, name: string | null | undefined, farsiName: string | null | undefined, imageContent: FileParameter | null | undefined, parentId: number | undefined, specifications: string | null | undefined): Promise<number> {
+        let url_ = this.baseUrl + "/Category/UpdateCategory";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = new FormData();
+        if (id === null || id === undefined)
+            throw new Error("The parameter 'id' cannot be null.");
+        else
+            content_.append("Id", id.toString());
+        if (name !== null && name !== undefined)
+            content_.append("Name", name.toString());
+        if (farsiName !== null && farsiName !== undefined)
+            content_.append("FarsiName", farsiName.toString());
+        if (imageContent !== null && imageContent !== undefined)
+            content_.append("ImageContent", imageContent.data, imageContent.fileName ? imageContent.fileName : "ImageContent");
+        if (parentId === null || parentId === undefined)
+            throw new Error("The parameter 'parentId' cannot be null.");
+        else
+            content_.append("ParentId", parentId.toString());
+        if (specifications !== null && specifications !== undefined)
+            content_.append("Specifications", specifications.toString());
+
+        let options_ = <RequestInit>{
+            body: content_,
+            method: "PUT",
+            headers: {
+                "Accept": "application/json"
+            }
+        };
+
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response: Response) => {
+            return this.processUpdate(_response);
+        });
+    }
+
+    protected processUpdate(response: Response): Promise<number> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = resultData200 !== undefined ? resultData200 : <any>null;
+            return result200;
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<number>(<any>null);
+    }
+
+    softDelete(id: number | undefined): Promise<FileResponse> {
+        let url_ = this.baseUrl + "/Category/DeleteCategory?";
+        if (id === null)
+            throw new Error("The parameter 'id' cannot be null.");
+        else if (id !== undefined)
+            url_ += "id=" + encodeURIComponent("" + id) + "&";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ = <RequestInit>{
+            method: "DELETE",
+            headers: {
+                "Accept": "application/octet-stream"
+            }
+        };
+
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response: Response) => {
+            return this.processSoftDelete(_response);
+        });
+    }
+
+    protected processSoftDelete(response: Response): Promise<FileResponse> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200 || status === 206) {
+            const contentDisposition = response.headers ? response.headers.get("content-disposition") : undefined;
+            const fileNameMatch = contentDisposition ? /filename="?([^"]*?)"?(;|$)/g.exec(contentDisposition) : undefined;
+            const fileName = fileNameMatch && fileNameMatch.length > 1 ? fileNameMatch[1] : undefined;
+            return response.blob().then(blob => { return { fileName: fileName, data: blob, status: status, headers: _headers }; });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<FileResponse>(<any>null);
     }
 }
 
@@ -387,6 +520,46 @@ export class ProductClient extends BaseClass {
         return Promise.resolve<ProductVm>(<any>null);
     }
 
+    getProductById(id: number | undefined): Promise<ProductDto> {
+        let url_ = this.baseUrl + "/Product/GetProductById?";
+        if (id === null)
+            throw new Error("The parameter 'id' cannot be null.");
+        else if (id !== undefined)
+            url_ += "id=" + encodeURIComponent("" + id) + "&";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ = <RequestInit>{
+            method: "GET",
+            headers: {
+                "Accept": "application/json"
+            }
+        };
+
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response: Response) => {
+            return this.processGetProductById(_response);
+        });
+    }
+
+    protected processGetProductById(response: Response): Promise<ProductDto> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = ProductDto.fromJS(resultData200);
+            return result200;
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<ProductDto>(<any>null);
+    }
+
     create(brandName: string | null | undefined, description: string | null | undefined, shortDescription: string | null | undefined, name: string | null | undefined, farsiName: string | null | undefined, price: number | undefined, image: FileParameter | null | undefined, productSpecifications: string | null | undefined, categoryId: number | undefined): Promise<number> {
         let url_ = this.baseUrl + "/Product";
         url_ = url_.replace(/[?&]$/, "");
@@ -446,6 +619,109 @@ export class ProductClient extends BaseClass {
             });
         }
         return Promise.resolve<number>(<any>null);
+    }
+
+    update(id: number | undefined, brandName: string | null | undefined, description: string | null | undefined, shortDescription: string | null | undefined, name: string | null | undefined, farsiName: string | null | undefined, price: number | undefined, image: FileParameter | null | undefined, productSpecifications: string | null | undefined, categoryId: number | undefined): Promise<number> {
+        let url_ = this.baseUrl + "/Product/UpdateProduct";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = new FormData();
+        if (id === null || id === undefined)
+            throw new Error("The parameter 'id' cannot be null.");
+        else
+            content_.append("Id", id.toString());
+        if (brandName !== null && brandName !== undefined)
+            content_.append("BrandName", brandName.toString());
+        if (description !== null && description !== undefined)
+            content_.append("Description", description.toString());
+        if (shortDescription !== null && shortDescription !== undefined)
+            content_.append("ShortDescription", shortDescription.toString());
+        if (name !== null && name !== undefined)
+            content_.append("Name", name.toString());
+        if (farsiName !== null && farsiName !== undefined)
+            content_.append("FarsiName", farsiName.toString());
+        if (price === null || price === undefined)
+            throw new Error("The parameter 'price' cannot be null.");
+        else
+            content_.append("Price", price.toString());
+        if (image !== null && image !== undefined)
+            content_.append("Image", image.data, image.fileName ? image.fileName : "Image");
+        if (productSpecifications !== null && productSpecifications !== undefined)
+            content_.append("ProductSpecifications", productSpecifications.toString());
+        if (categoryId === null || categoryId === undefined)
+            throw new Error("The parameter 'categoryId' cannot be null.");
+        else
+            content_.append("CategoryId", categoryId.toString());
+
+        let options_ = <RequestInit>{
+            body: content_,
+            method: "PUT",
+            headers: {
+                "Accept": "application/json"
+            }
+        };
+
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response: Response) => {
+            return this.processUpdate(_response);
+        });
+    }
+
+    protected processUpdate(response: Response): Promise<number> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = resultData200 !== undefined ? resultData200 : <any>null;
+            return result200;
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<number>(<any>null);
+    }
+
+    softDelete(id: number | undefined): Promise<FileResponse> {
+        let url_ = this.baseUrl + "/Product/DeleteProduct?";
+        if (id === null)
+            throw new Error("The parameter 'id' cannot be null.");
+        else if (id !== undefined)
+            url_ += "id=" + encodeURIComponent("" + id) + "&";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ = <RequestInit>{
+            method: "DELETE",
+            headers: {
+                "Accept": "application/octet-stream"
+            }
+        };
+
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response: Response) => {
+            return this.processSoftDelete(_response);
+        });
+    }
+
+    protected processSoftDelete(response: Response): Promise<FileResponse> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200 || status === 206) {
+            const contentDisposition = response.headers ? response.headers.get("content-disposition") : undefined;
+            const fileNameMatch = contentDisposition ? /filename="?([^"]*?)"?(;|$)/g.exec(contentDisposition) : undefined;
+            const fileName = fileNameMatch && fileNameMatch.length > 1 ? fileNameMatch[1] : undefined;
+            return response.blob().then(blob => { return { fileName: fileName, data: blob, status: status, headers: _headers }; });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<FileResponse>(<any>null);
     }
 }
 
@@ -882,6 +1158,7 @@ export class Category implements ICategory {
     name?: string | undefined;
     farsiName?: string | undefined;
     image?: string | undefined;
+    isDeleted?: boolean;
     parentId?: number;
     content?: string | undefined;
     productCategories?: ProductCategory[] | undefined;
@@ -902,6 +1179,7 @@ export class Category implements ICategory {
             this.name = _data["name"];
             this.farsiName = _data["farsiName"];
             this.image = _data["image"];
+            this.isDeleted = _data["isDeleted"];
             this.parentId = _data["parentId"];
             this.content = _data["content"];
             if (Array.isArray(_data["productCategories"])) {
@@ -930,6 +1208,7 @@ export class Category implements ICategory {
         data["name"] = this.name;
         data["farsiName"] = this.farsiName;
         data["image"] = this.image;
+        data["isDeleted"] = this.isDeleted;
         data["parentId"] = this.parentId;
         data["content"] = this.content;
         if (Array.isArray(this.productCategories)) {
@@ -951,6 +1230,7 @@ export interface ICategory {
     name?: string | undefined;
     farsiName?: string | undefined;
     image?: string | undefined;
+    isDeleted?: boolean;
     parentId?: number;
     content?: string | undefined;
     productCategories?: ProductCategory[] | undefined;
@@ -1019,6 +1299,7 @@ export class Product implements IProduct {
     price?: number;
     image?: string | undefined;
     categoryId?: number;
+    isDeleted?: boolean;
     cartProducts?: CartProduct[] | undefined;
     productSpecifications?: ProductSpecification[] | undefined;
     productCategories?: ProductCategory[] | undefined;
@@ -1043,6 +1324,7 @@ export class Product implements IProduct {
             this.price = _data["price"];
             this.image = _data["image"];
             this.categoryId = _data["categoryId"];
+            this.isDeleted = _data["isDeleted"];
             if (Array.isArray(_data["cartProducts"])) {
                 this.cartProducts = [] as any;
                 for (let item of _data["cartProducts"])
@@ -1079,6 +1361,7 @@ export class Product implements IProduct {
         data["price"] = this.price;
         data["image"] = this.image;
         data["categoryId"] = this.categoryId;
+        data["isDeleted"] = this.isDeleted;
         if (Array.isArray(this.cartProducts)) {
             data["cartProducts"] = [];
             for (let item of this.cartProducts)
@@ -1108,6 +1391,7 @@ export interface IProduct {
     price?: number;
     image?: string | undefined;
     categoryId?: number;
+    isDeleted?: boolean;
     cartProducts?: CartProduct[] | undefined;
     productSpecifications?: ProductSpecification[] | undefined;
     productCategories?: ProductCategory[] | undefined;
@@ -1862,6 +2146,13 @@ export interface IUserDto {
 export interface FileParameter {
     data: any;
     fileName: string;
+}
+
+export interface FileResponse {
+    data: Blob;
+    status: number;
+    fileName?: string;
+    headers?: { [name: string]: any };
 }
 
 export class ApiException extends Error {

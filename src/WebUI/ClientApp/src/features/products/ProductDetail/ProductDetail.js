@@ -1,13 +1,13 @@
 import React, { useEffect } from "react";
-import PropTypes from "prop-types";
+import { Col, Row, Spinner } from "react-bootstrap";
+import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router";
-import { Col, Row } from "react-bootstrap";
 import ProductInfo from "./components/ProductInfo";
-import { useSelector, useDispatch } from "react-redux";
+
 import {
-  getProductById,
-  selectLoadingProduct,
-  selectProductById,
+    getProductById,
+    selectLoadingProduct,
+    selectProductById
 } from "../productSlice";
 import ShoppingCartSection from "./components/ShoppingCartSection";
 const ProductDetail = (props) => {
@@ -20,7 +20,7 @@ const ProductDetail = (props) => {
     dispatch(getProductById(id));
   }, [id]);
     if (loading ) {
-    return <div className="centerBox">در حال بارگزاری ...</div>;
+        return <Spinner animation="border" variant="primary" />
   } else {
     return (
       <div>

@@ -15,7 +15,7 @@ export const productSlice = createSlice({
     },
     reducers: {
         getProductById: (state, action) => {
-            state.selectedProduct = state.productList?.filter(p => p.id === +action.payload)[0];
+            state.selectedProduct = action.payload;
             state.loadingProduct = false;
         },
         getProducts: (state, action) => {
@@ -47,6 +47,7 @@ export const selectAllProductCategoryList = state => state.products.allProductCa
 export const selectProductByCategory = state => state.products.productListByCategory;
 export const selectProductById = state => state.products.selectedProduct;
 
+export const selectLoadingProducts = state => state.products.loadingProducts;
 export const selectLoading = state => state.products.loading;
 export const selectLoadingProduct = state => state.products.loadingProduct;
 export const selectLoadingProductCategoryList = state => state.products.loadingProductCategoryList;

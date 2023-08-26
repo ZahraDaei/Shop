@@ -1,4 +1,4 @@
-
+    
 const profilePfx="/Profile"
 export const Profile={
     User_Info:"user_info"
@@ -10,7 +10,14 @@ export const Admin={
     Category:"category",
     CreateCategory:"createcategory",
     Product:"product",
-    CreateProduct:"/createproduct"
+    Category:"category",
+    CreateProduct:"createproduct",
+    AdminProductDetail:"adminproductdetail",
+    EditProduct:"EditProduct",
+    DeleteProduct: "DeleteProduct",
+    CategoryDetail: "CategoryDetail",
+    EditCategory:"EditCategory",
+    DeleteCategory:"DeleteCategory"
 }
 
 const checkoutPfx="/checkout"
@@ -27,6 +34,12 @@ export const AppPath={
     CreateCategory:`${adminPfx}/${Admin.Category}/${Admin.CreateCategory}`,
     Product:`${adminPfx}/${Admin.Product}`,
     CreateProduct:`${adminPfx}/${Admin.Product}/${Admin.CreateProduct}`,
+    EditProduct: `${adminPfx}/${Admin.Product}/${Admin.EditProduct}`,
+    DeleteProduct: `${adminPfx}/${Admin.Product}/${Admin.DeleteProduct}`,
+    AdminProductDetail: `${adminPfx}/${Admin.Product}/${Admin.AdminProductDetail}`,
+    EditCategory: `${adminPfx}/${Admin.Category}/${Admin.EditCategory}`,
+    DeleteCategory: `${adminPfx}/${Admin.Category}/${Admin.DeleteCategory}`,
+    CategoryDetail: `${adminPfx}/${Admin.Category}/${Admin.CategoryDetail}`,
     CheckoutCart:`${checkoutPfx}/${Checkout.Cart}`,
     CheckoutShipping: `${checkoutPfx}/${Checkout.Shipping}`,
     CheckoutPayment: `${checkoutPfx}/${Checkout.Payment}`
