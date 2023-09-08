@@ -11,6 +11,9 @@ import {
     getProductsByCategory,
     selectProductByCategory,
 } from "../../productSlice";
+import "react-placeholder/lib/reactPlaceholder.css";
+import ReactPlaceholder from 'react-placeholder';
+import PlaceHolder from "../../../PlaceHolder";
 
 const ProductList = ({ categoryName }) => {
     const products = useSelector(selectProductByCategory);
@@ -36,11 +39,13 @@ const ProductList = ({ categoryName }) => {
             >
                 {products?.map((item, index) => (
                     <Col key={index}>
-                        <ProductCard item={item} />
+                        <ReactPlaceholder customPlaceholder={<PlaceHolder />} ready={!loading} showLoadingAnimation={true}   color='#E0E0E0' style={{ width: 50, height: 50 }}>
+                            <ProductCard item={item} />
+                        </ReactPlaceholder>
                     </Col>
                 ))}
             </Row>
-        </div>
+        </div >
     );
 }
 

@@ -24,12 +24,14 @@ export default function AdminProductDetail() {
         return (
             <Row style={{ padding: "0 40px" }}>
                 <Col sm={12} lg={4}>
-                    <img
-                        src={`/images/${product.image}`}
+                    {product.images.map((img, index) => <div style={{maxWidth:"30%"} }>
+                        <img
+                        key={ index}
+                        src={`/images/product/${img}`}
                         alt={product.name}
                         style={{ maxWidth: "100%" }}
                     />
-                    
+                    </div>)}
                 </Col>
                 <Col sm={12} lg={8}>
                     <div className="d-flex justify-content-start">

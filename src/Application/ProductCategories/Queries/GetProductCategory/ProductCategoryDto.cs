@@ -13,7 +13,7 @@ namespace Shop.Application.ProductCategories.Queries.GetProductCategory
         public string Name { get; set; }
         public string FarsiName { get; set; }
         public decimal Price { get; set; }
-        public string Image { get; set; }
+        public List<string> Images { get; set; }
         public long LastCategoryId { get; set; }
         public long CategoryId { get; set; }
         public string CategoryName { get; set; }

@@ -29,7 +29,7 @@ namespace Shop.Application.CartProducts.Queries.GetCartProducts
             profile.CreateMap<CartProduct, CartProductDto>().ForMember(des => des.Name, s => s.MapFrom(s => s.Product.Name));
             profile.CreateMap<CartProduct, CartProductDto>().ForMember(des => des.FarsiName, s => s.MapFrom(s => s.Product.FarsiName));
             profile.CreateMap<CartProduct, CartProductDto>().ForMember(des => des.Price, s => s.MapFrom(s => s.Product.Price));
-            profile.CreateMap<CartProduct, CartProductDto>().ForMember(des => des.Image, s => s.MapFrom(s => s.Product.Image));
+            profile.CreateMap<CartProduct, CartProductDto>().ForMember(des => des.Image, s => s.MapFrom(s => s.Product.Images.FirstOrDefault()));
         }
     }
 }

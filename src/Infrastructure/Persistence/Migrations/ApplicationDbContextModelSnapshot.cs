@@ -315,14 +315,14 @@ namespace Shop.Infrastructure.Persistence.Migrations
                         .HasColumnType("bigint")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<byte[]>("Content")
-                        .HasColumnType("varbinary(max)");
-
                     b.Property<string>("FarsiName")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Image")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
 
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
@@ -378,9 +378,6 @@ namespace Shop.Infrastructure.Persistence.Migrations
                     b.Property<string>("FarsiName")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Image")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
@@ -420,6 +417,26 @@ namespace Shop.Infrastructure.Persistence.Migrations
                     b.ToTable("ProductCategories");
                 });
 
+            modelBuilder.Entity("Shop.Domain.Entities.ProductImage", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<long>("ProductId")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProductId");
+
+                    b.ToTable("ProductImages");
+                });
+
             modelBuilder.Entity("Shop.Domain.Entities.ProductSpecification", b =>
                 {
                     b.Property<long>("Id")
@@ -439,6 +456,8 @@ namespace Shop.Infrastructure.Persistence.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("ProductId");
+
+                    b.HasIndex("SpecificationId");
 
                     b.ToTable("ProductSpecifications");
                 });
@@ -729,6 +748,17 @@ namespace Shop.Infrastructure.Persistence.Migrations
                     b.Navigation("Product");
                 });
 
+            modelBuilder.Entity("Shop.Domain.Entities.ProductImage", b =>
+                {
+                    b.HasOne("Shop.Domain.Entities.Product", "Product")
+                        .WithMany("Images")
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Product");
+                });
+
             modelBuilder.Entity("Shop.Domain.Entities.ProductSpecification", b =>
                 {
                     b.HasOne("Shop.Domain.Entities.Product", "Product")
@@ -737,7 +767,15 @@ namespace Shop.Infrastructure.Persistence.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("Shop.Domain.Entities.Specification", "Specification")
+                        .WithMany()
+                        .HasForeignKey("SpecificationId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("Product");
+
+                    b.Navigation("Specification");
                 });
 
             modelBuilder.Entity("Shop.Domain.Entities.ShoppingCart", b =>
@@ -820,6 +858,8 @@ namespace Shop.Infrastructure.Persistence.Migrations
             modelBuilder.Entity("Shop.Domain.Entities.Product", b =>
                 {
                     b.Navigation("CartProducts");
+
+                    b.Navigation("Images");
 
                     b.Navigation("ProductCategories");
 

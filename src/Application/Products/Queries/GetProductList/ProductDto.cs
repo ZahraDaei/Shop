@@ -2,6 +2,7 @@
 using Shop.Application.Common.Mappings;
 using Shop.Domain.Entities;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Shop.Application.Products.Queries.GetProductList
 {
@@ -14,7 +15,7 @@ namespace Shop.Application.Products.Queries.GetProductList
         public string Name { get; set; }
         public string FarsiName { get; set; }
         public decimal Price { get; set; }
-        public string Image { get; set; }
+        public List<string> Images { get; set; }
         public long CategoryId { get; set; }
         public IEnumerable<KeyValueSpecification> Specifications { get; set; }
 

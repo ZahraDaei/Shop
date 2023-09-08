@@ -45,6 +45,7 @@ namespace Shop.Infrastructure.Persistence
         public DbSet<Specification> Specifications { get; set; }
         public DbSet<ProductCategory> ProductCategories { get; set; }
         public DbSet<ProductSpecification> ProductSpecifications { get; set; }
+        public DbSet<ProductImage> ProductImages { get; set; }
 
         public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())
         {

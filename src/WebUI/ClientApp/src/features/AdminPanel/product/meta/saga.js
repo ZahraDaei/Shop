@@ -21,7 +21,7 @@ const CreateProductItem = async (payload) => {
         payload.name,
         payload.farsiName,
         +payload.price,
-        { data: payload.image, fileName: payload.image.name },
+        payload.images.map(x => { return { data: x, fileName: x.name } }),
         spec, 
         payload.productCategory);
 }

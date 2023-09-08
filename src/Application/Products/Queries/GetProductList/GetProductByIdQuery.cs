@@ -34,45 +34,24 @@ namespace Shop.Application.Products.Queries.GetProductList
         {
             try
             {
+                var productDto = new ProductDto();
 
-                var product = await _context.Products.Where(p=>p.Id==request.Id).FirstOrDefaultAsync();
-
-
-                var productDto= new ProductDto();
-                var product_category = await _context.ProductCategories.Where(p => p.ProductId == request.Id).ToListAsync();
-                var categories = await _context.Categories.ToListAsync();
-                var product_specifications = await _context.ProductSpecifications.Where(p => p.ProductId == request.Id).ToListAsync();
-                var specification = await _context.Specifications.ToListAsync();
-
-                var joined_product_specification = from ps in product_specifications
-                                                   join s in specification on ps.SpecificationId equals s.Id
-                                                   select new
-                                                   {
-                                                       ProductId = ps.ProductId,
-                                                       Specification = new KeyValueSpecification() { Key = s.SpecificationKey, Value = ps.SpecificationValue },
-
-                                                   };
-
-                var grouped_product_specification = from jps in joined_product_specification
-                                                    group jps.Specification by jps.ProductId into g
-                                                    select new
-                                                    { ProductId = g.Key, Specification = g.ToList() };
-
-                productDto = new ProductDto
-                                        {
-                                            BrandName = product.BrandName,
-                                            Id = product.Id,
-                                            Name = product.Name,
-                                            FarsiName = product.FarsiName,
-                                            Description = product.Description,
-                                            Image = product.Image,
-                                            Price = product.Price,
-                                            ShortDescription = product.ShortDescription,
-                                            Specifications= grouped_product_specification.Select(x => x.Specification).FirstOrDefault(),
-                                            CategoryId =product.CategoryId,
-                                        };
-
-
+                productDto = await _context.Products.Where(h => !h.IsDeleted && h.Id == request.Id)
+                   .Include(q => q.Images)
+                   .Include(p => p.ProductSpecifications)
+                   .ThenInclude(x => x.Specification).Select(f => new ProductDto
+                   {
+                       BrandName = f.BrandName,
+                       Id = f.Id,
+                       Name = f.Name,
+                       FarsiName = f.FarsiName,
+                       Description = f.Description,
+                       Images = f.Images.Select(s=>s.Name).ToList(),
+                       Price = f.Price,
+                       ShortDescription = f.ShortDescription,
+                       Specifications = f.ProductSpecifications.Select(k => new KeyValueSpecification() { Key = k.Specification.SpecificationKey, Value = k.SpecificationValue }),
+                       CategoryId = f.CategoryId,
+                   }).FirstOrDefaultAsync();
 
 
                 return productDto;

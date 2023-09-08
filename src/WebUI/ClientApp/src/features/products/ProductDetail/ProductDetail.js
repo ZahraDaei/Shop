@@ -5,7 +5,7 @@ import { useParams } from "react-router";
 import ProductInfo from "./components/ProductInfo";
 
 import {
-    getProductById,
+    clearProduct,
     selectLoadingProduct,
     selectProductById
 } from "../productSlice";
@@ -17,8 +17,13 @@ const ProductDetail = (props) => {
   const loading = useSelector(selectLoadingProduct);
 
   useEffect(() => {
-    dispatch(getProductById(id));
+      dispatch({ type:"GET_PRODUCT_BY_ID_START",payload:id});
+   return () => {
+            dispatch({ type: "product/clearProduct" })
+        }
   }, [id]);
+
+
     if (loading ) {
         return <Spinner animation="border" variant="primary" />
   } else {
@@ -27,7 +32,7 @@ const ProductDetail = (props) => {
         <Row style={{ padding: "0 40px" }}>
           <Col sm={12} lg={4}>
             <img
-              src={`/images/${product.image}`}
+              src={`/images/product/${product.image}`}
               alt="MISSING JPG"
               style={{ maxWidth: "100%" }}
             />

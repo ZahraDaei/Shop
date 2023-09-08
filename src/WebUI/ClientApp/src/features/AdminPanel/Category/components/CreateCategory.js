@@ -16,6 +16,7 @@ import { FcExpand } from 'react-icons/fc';
 import { BsChevronLeft } from 'react-icons/bs';
 
 
+
 export default function CreateCategory() {
     const history = useHistory();
 
@@ -54,7 +55,7 @@ export default function CreateCategory() {
 
 
     const onSubmit = data => {
-        if (data.parentId===undefined) {
+        if (data.parentId === undefined) {
             data.parentId = 0;
         }
         data.name = data.name.trim().toLowerCase();
@@ -105,87 +106,96 @@ export default function CreateCategory() {
         </TreeItem>
     );
 
+    const [imageFile, setImageFile] = useState("/images/placeholder.png");
 
-    useEffect(() => {
+    function handleChange(e) {
+        console.log(e.target.files);
+        setFile(e.target.files[0])
+        setImageFile(URL.createObjectURL(e.target.files[0]));
+    }
 
-        if (loading) {
-            setContent(<div style={{ display: "flex", alignItems: "center" }}><Spinner animation="border" variant="primary" /></div>)
-        } else {
-            setContent(
-                <div className="borderStyle formStyle w-50" >
-                    <FormProvider {...methods} >
-                        <form autoComplete="off" onSubmit={methods.handleSubmit(onSubmit, (e) => console.log(e))}>
-                            <div className=" inputFlexBox" >
-                                <label>نام دسته بندی (انگلیسی):</label>
-                                <input className="inputStyle" autoFocus  {...methods.register("name")} />
-                            </div>
-                            <div className="inputErrorStyle">  {errors?.name?.message}</div>
-                            <div className=" inputFlexBox" >
-                                <label>نام دسته بندی (فارسی):</label>
-                                <input className="inputStyle"   {...methods.register("farsiName")} />
-                            </div>
-                            <div className="inputErrorStyle">  {errors?.farsiName?.message}</div>
-                            <div className="inputBoxStyle">
-                                <label >تصویر:</label>
-                                <Button variant="primary" ><label htmlFor="files" >انتخاب تصویر</label></Button>
+    const alert = useSelector(selectAlert);
+    if (loading) {
+        return <div style={{ display: "flex", alignItems: "center" }}><Spinner animation="border" variant="primary" /></div>
+    }
+    else {
+        return (
+            <Container>
+                <Alert variant={alert.variant} show={Boolean(alert.variant)} >
+                    <div>{alert.message}</div>
+                </Alert>
+                <div className="d-flex justify-content-center">
 
-                                <input
-                                    id="files"
-                                    type="file"
-                                    {...methods.register('image', { onChange: (e) => setFile(e.target.files[0]) })}
-                                    style={{ visibility: "hidden" }}
-                                    accept="image/png, image/jpeg" />
-                                <div style={{ height: "40px" }}> {file?.name}</div>
-                            </div>
-                            <div className="inputErrorStyle">  {errors?.image?.message}</div>
+                    <div className="borderStyle formStyle w-50" >
+                        <FormProvider {...methods} >
+                            <form autoComplete="off" onSubmit={methods.handleSubmit(onSubmit, (e) => console.log(e))}>
+                                <div className=" inputFlexBox" >
+                                    <label>نام دسته بندی (انگلیسی):</label>
+                                    <input className="inputStyle" autoFocus  {...methods.register("name")} />
+                                </div>
+                                <div className="inputErrorStyle">  {errors?.name?.message}</div>
+                                <div className=" inputFlexBox" >
+                                    <label>نام دسته بندی (فارسی):</label>
+                                    <input className="inputStyle"   {...methods.register("farsiName")} />
+                                </div>
+                                <div className="inputErrorStyle">  {errors?.farsiName?.message}</div>
+                                <div className="inputBoxStyle">
+                                    <label >تصویر:</label>
+                                    <Button variant="primary" ><label htmlFor="files" >انتخاب تصویر</label></Button>
 
-                            <div className="mb-3">
-                                <label>در صورتی که دسته غیر اصلی تعریف می کنید در زیر دسته آن را انتخاب کنید در غیر این صورت دکمه ثبت را بزنید.</label>
-                            </div>
+                                    <input
+                                        id="files"
+                                        type="file"
+                                        {...methods.register('image', { onChange: (e) => handleChange(e) })}
+                                        style={{ visibility: "hidden" }}
+                                        accept="image/png, image/jpeg" />
+                                    <div style={{ height: "40px" }}> {file?.name}</div>
+                                </div>
+                                <div className="inputErrorStyle">  {errors?.image?.message}</div>
+                             
+                                    <img
+                                        src={imageFile}
+                                        alt="MISSING JPG"
+                                        style={{ maxWidth: "20%" }}
+                                    />
+                                <div className="mb-3">
+                                    <label>در صورتی که دسته غیر اصلی تعریف می کنید در زیر دسته آن را انتخاب کنید در غیر این صورت دکمه ثبت را بزنید.</label>
+                                </div>
 
-                            <div >
-                                <Controller
-                                    name={"parentId"}
-                                    control={methods.control}
-                                    render={({ field: { onChange, value } }) => (
+                                <div >
+                                    <Controller
+                                        name={"parentId"}
+                                        control={methods.control}
+                                        render={({ field: { onChange, value } }) => (
 
-                                        <TreeView
-                                            aria-label="rich object"
-                                            defaultCollapseIcon={<FcExpand />}
-                                            defaultExpandIcon={<BsChevronLeft />}
-                                            onNodeSelect={(e, id) => onChange(id)}
-                                            sx={{ height: 110, flexGrow: 1, maxWidth: 400, overflowY: 'auto' }}
-                                        >
-                                            {renderTree(productCategories)}
-                                        </TreeView>
-                                    )}
+                                            <TreeView
+                                                aria-label="rich object"
+                                                defaultCollapseIcon={<FcExpand />}
+                                                defaultExpandIcon={<BsChevronLeft />}
+                                                onNodeSelect={(e, id) => onChange(id)}
+                                                sx={{ height: 110, flexGrow: 1, maxWidth: 400, overflowY: 'auto' }}
+                                            >
+                                                {renderTree(productCategories)}
+                                            </TreeView>
+                                        )}
 
-                                />
-                            </div>
-                            <div>
-                                <input  {...methods.register("lastLevel")} type="checkbox" />
-                                <label>دسته بندی بعنوان پایین ترین سطح </label>
-                                {watchShowSpec && <Specification />}
-                            </div>
+                                    />
+                                </div>
+                                <div>
+                                    <input  {...methods.register("lastLevel")} type="checkbox" />
+                                    <label>دسته بندی بعنوان پایین ترین سطح </label>
+                                    {watchShowSpec && <Specification />}
+                                </div>
 
-                            <button type="submit" className="btn btn-primary" style={{ "float": "left", "width": "20%", "marginTop": "40px" }}>ثبت</button>
-                            <button type="button" onClick={history.goBack} className="btn btn-secondary" style={{ "float": "left", "width": "20%", "marginTop": "40px" }}>بازگشت</button>
-                        </form>
-                    </FormProvider>
+                                <button type="submit" className="btn btn-primary" style={{ "float": "left", "width": "20%", "marginTop": "40px" }}>ثبت</button>
+                                <button type="button" onClick={history.goBack} className="btn btn-secondary" style={{ "float": "left", "width": "20%", "marginTop": "40px" }}>بازگشت</button>
+                            </form>
+                        </FormProvider>
+                    </div>
+
                 </div>
-            )
-        }
-    }, [loading, file, errors, watchShowSpec, productCategories])
-    return (
-        <Container>
-            <Alert variant={useSelector(selectAlert).variant} show={Boolean(useSelector(selectAlert).variant)} >
-                <div>{useSelector(selectAlert).message}</div>
-            </Alert>
-            <div className="d-flex justify-content-center">
-
-                    {content}
-            </div>
-        </Container>
-    );
+            </Container>
+        );
+    }
 
 }

@@ -26,7 +26,7 @@ namespace Shop.Application.Products.Commands.CreateProduct
         public string Name { get; set; }
         public string FarsiName { get; set; }
         public decimal Price { get; set; }
-        public IFormFile Image { get; set; }
+        public List<IFormFile> Images { get; set; }
         //public List<ProductSpecificationKeyValue> ProductSpecifications { get; set; }
         public string ProductSpecifications { get; set; }
         public long CategoryId { get; set; }
@@ -39,7 +39,8 @@ namespace Shop.Application.Products.Commands.CreateProduct
         private readonly IMediator _mediator;
         private readonly IWebHostEnvironment _hostingEnvironment;
 
-        public CreateProductCommandHandler(IApplicationDbContext context, IMediator mediator, IWebHostEnvironment environment)
+        public CreateProductCommandHandler(IApplicationDbContext context,
+            IMediator mediator, IWebHostEnvironment environment)
         {
             _context = context;
             _mediator = mediator;
@@ -50,20 +51,22 @@ namespace Shop.Application.Products.Commands.CreateProduct
         {
 
             var product = await _context.Products.FirstOrDefaultAsync(x => x.Name == request.Name);
-            if (product!=null)
+            if (product != null)
             {
                 var err = new ValidationException();
-                err.Errors.Add("محصول",new string[] { "تکراری" });
+                err.Errors.Add("محصول", new string[] { "تکراری" });
                 throw err;
             }
-            string images = Path.Combine(_hostingEnvironment.WebRootPath, "images");
-            var file = request.Image;
-            if (file.Length > 0)
+            string images = Path.Combine(_hostingEnvironment.WebRootPath, "images/product");
+            foreach (var file in request.Images)
             {
-                string filePath = Path.Combine(images, file.FileName);
-                using (Stream fileStream = new FileStream(filePath, FileMode.Create))
+                if (file.Length > 0)
                 {
-                    await file.CopyToAsync(fileStream);
+                    string filePath = Path.Combine(images, file.FileName);
+                    using (Stream fileStream = new FileStream(filePath, FileMode.Create))
+                    {
+                        await file.CopyToAsync(fileStream);
+                    }
                 }
             }
 
@@ -72,15 +75,21 @@ namespace Shop.Application.Products.Commands.CreateProduct
                 BrandName = request.BrandName,
                 Description = request.Description,
                 FarsiName = request.FarsiName,
-                Image = request.Image.FileName,
                 Name = request.Name,
                 Price = request.Price,
                 ShortDescription = request.ShortDescription,
                 CategoryId = request.CategoryId
             };
-
             _context.Products.Add(entity);
             await _context.SaveChangesAsync(cancellationToken);
+
+            foreach (var item in request.Images)
+            {
+                var imgEntity=new ProductImage() { Name = item.FileName, ProductId=entity.Id };
+                _context.ProductImages.Add(imgEntity);
+            }
+            await _context.SaveChangesAsync(cancellationToken);
+
 
             var catEnumerable = await _mediator.Send(new GetCategoryListQuery());
 

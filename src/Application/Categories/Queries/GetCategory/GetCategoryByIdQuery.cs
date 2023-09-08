@@ -37,8 +37,6 @@ namespace Shop.Application.Categories.Queries.GetCategory
 
                var categoryDto = await _context.Categories.Where(c=>c.Id==request.CategoryId)
                             .ProjectTo<CategoryDto>(_mapper.ConfigurationProvider).FirstOrDefaultAsync();
-               
-
               
                 return categoryDto;
             }
@@ -46,12 +44,8 @@ namespace Shop.Application.Categories.Queries.GetCategory
             {
 
                 throw;
-            }
-           
+            }           
         }
-
-   
-
     }
 }
 

@@ -124,7 +124,12 @@ export default function EditCategory() {
                                 <div style={{ height: "40px" }}> {file?.name}</div>
                             </div>
                             <div className="inputErrorStyle">  {errors?.image?.message}</div>
-
+                            <div style={{ height: "40px" }}> {file?.name ?? methods.getValues("image")}</div>
+                            <img
+                                src={`/images/category/${methods.getValues("image") }`}
+                                alt="MISSING JPG"
+                                style={{ maxWidth: "20%" }}
+                            />
                             <div className="mb-3">
                                 <label>در صورتی که دسته غیر اصلی تعریف می کنید در زیر دسته آن را انتخاب کنید در غیر این صورت دکمه ثبت را بزنید.</label>
                             </div>

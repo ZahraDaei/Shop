@@ -24,7 +24,8 @@ namespace Shop.Application.Products.Commands.CreateProduct
         public long Id { get; set; }
         public string Name { get; set; }
         public string FarsiName { get; set; }
-        public IFormFile ImageContent { get; set; }
+        public IFormFile AddedImage { get; set; }
+        public List<string> RemovedImage { get; set; }
         public long ParentId { get; set; }
         public string Specifications { get; set; }
 
@@ -37,7 +38,8 @@ namespace Shop.Application.Products.Commands.CreateProduct
         private readonly IWebHostEnvironment _hostingEnvironment;
         private CancellationToken _cancellationToken;
 
-        public UpdateCategoryCommandHandler(IApplicationDbContext context, IMediator mediator, IWebHostEnvironment environment)
+        public UpdateCategoryCommandHandler(IApplicationDbContext context,
+            IMediator mediator, IWebHostEnvironment environment)
         {
             _context = context;
             _mediator = mediator;
@@ -57,18 +59,19 @@ namespace Shop.Application.Products.Commands.CreateProduct
 
 
             category.FarsiName = request.FarsiName;
-            category.Image = request.ImageContent.FileName;
+            category.Image = request.AddedImage.FileName;
             category.Name = request.Name;
             category.ParentId = request.ParentId;
-            using (var memoryStream = new MemoryStream())
-            {
-                await request.ImageContent.CopyToAsync(memoryStream);
+            await UpdateImage(category, request);
+            //using (var memoryStream = new MemoryStream())
+            //{
+            //    await request.AddedImage.CopyToAsync(memoryStream);
 
-                if (memoryStream.Length < 100000)
-                {
-                    category.Content = memoryStream.ToArray();
-                }
-            }
+            //    if (memoryStream.Length < 100000)
+            //    {
+            //        category.Content = memoryStream.ToArray();
+            //    }
+            //}
 
             _context.Categories.Update(category);
             await _context.SaveChangesAsync(cancellationToken);
@@ -101,9 +104,40 @@ namespace Shop.Application.Products.Commands.CreateProduct
             return category.Id;
         }
 
+        private async Task UpdateImage(Category category, UpdateCategoryCommand request)
+        {
+            string imagesPath = Path.Combine(_hostingEnvironment.WebRootPath, "images/category");
+            var files = Directory.GetFiles(imagesPath);
+            var file = request.AddedImage;
+            var imgName = file.FileName;
+            foreach (var item in files)
+            {
+                if (item.Contains($"\\{imgName}") && imgName != category.Image)
+                {
+                    var err = new ValidationException();
+                    err.Errors.Add("دسته بندی", new string[] { "نام عکس تکراری است" });
+                    throw err;
+                }
+                else if (item.Contains($"\\{imgName}") && imgName == category.Image)
+                {
+                    File.Delete(item);
+                    break;
+                }
+            }
+            string filePath = Path.Combine(imagesPath, imgName);
+            if (file.Length > 0)
+            {
+                using (Stream fileStream = new FileStream(filePath, FileMode.Create))
+                {
+                    await file.CopyToAsync(fileStream);
+                }
 
-
-
+                using (Stream fileStream = new FileStream(filePath, FileMode.Create))
+                {
+                    await file.CopyToAsync(fileStream);
+                }
+            }
+        }
 
     }
 }

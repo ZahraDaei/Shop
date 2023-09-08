@@ -56,7 +56,6 @@ namespace Shop.Application.Categories.Queries.GetCategory
 
                 throw;
             }
-
         }
         static void Test(IEnumerable<TreeItem<CategoryDto>> categories, int deep = 0)
         {

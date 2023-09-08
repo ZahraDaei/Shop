@@ -15,7 +15,7 @@ export default function AdminProductDetail() {
     const loading = useSelector(selectLoadingProduct);
 
     useEffect(() => {
-        dispatch({ type: "GET_PRODUCT_BY_ID_START", payload: id })
+        dispatch({ type: "GET_CATEGORY_BY_ID_START", payload: id })
     }, [])
     if (loading) {
         return <Spinner animation="border" variant="primary" />
@@ -25,7 +25,7 @@ export default function AdminProductDetail() {
             <Row style={{ padding: "0 40px" }}>
                 <Col sm={12} lg={4}>
                     <img
-                        src={`/images/${product.image}`}
+                        src={`/images/category/${product.image}`}
                         alt={product.name}
                         style={{ maxWidth: "100%" }}
                     />

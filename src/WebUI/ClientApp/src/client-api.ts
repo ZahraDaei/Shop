@@ -343,7 +343,7 @@ export class CategoryClient extends BaseClass {
         return Promise.resolve<number>(<any>null);
     }
 
-    update(id: number | undefined, name: string | null | undefined, farsiName: string | null | undefined, imageContent: FileParameter | null | undefined, parentId: number | undefined, specifications: string | null | undefined): Promise<number> {
+    update(id: number | undefined, name: string | null | undefined, farsiName: string | null | undefined, addedImage: FileParameter | null | undefined, removedImage: string[] | null | undefined, parentId: number | undefined, specifications: string | null | undefined): Promise<number> {
         let url_ = this.baseUrl + "/Category/UpdateCategory";
         url_ = url_.replace(/[?&]$/, "");
 
@@ -356,8 +356,10 @@ export class CategoryClient extends BaseClass {
             content_.append("Name", name.toString());
         if (farsiName !== null && farsiName !== undefined)
             content_.append("FarsiName", farsiName.toString());
-        if (imageContent !== null && imageContent !== undefined)
-            content_.append("ImageContent", imageContent.data, imageContent.fileName ? imageContent.fileName : "ImageContent");
+        if (addedImage !== null && addedImage !== undefined)
+            content_.append("AddedImage", addedImage.data, addedImage.fileName ? addedImage.fileName : "AddedImage");
+        if (removedImage !== null && removedImage !== undefined)
+            content_.append("RemovedImage", removedImage.toString());
         if (parentId === null || parentId === undefined)
             throw new Error("The parameter 'parentId' cannot be null.");
         else
@@ -560,7 +562,7 @@ export class ProductClient extends BaseClass {
         return Promise.resolve<ProductDto>(<any>null);
     }
 
-    create(brandName: string | null | undefined, description: string | null | undefined, shortDescription: string | null | undefined, name: string | null | undefined, farsiName: string | null | undefined, price: number | undefined, image: FileParameter | null | undefined, productSpecifications: string | null | undefined, categoryId: number | undefined): Promise<number> {
+    create(brandName: string | null | undefined, description: string | null | undefined, shortDescription: string | null | undefined, name: string | null | undefined, farsiName: string | null | undefined, price: number | undefined, images: FileParameter[] | null | undefined, productSpecifications: string | null | undefined, categoryId: number | undefined): Promise<number> {
         let url_ = this.baseUrl + "/Product";
         url_ = url_.replace(/[?&]$/, "");
 
@@ -579,8 +581,8 @@ export class ProductClient extends BaseClass {
             throw new Error("The parameter 'price' cannot be null.");
         else
             content_.append("Price", price.toString());
-        if (image !== null && image !== undefined)
-            content_.append("Image", image.data, image.fileName ? image.fileName : "Image");
+        if (images !== null && images !== undefined)
+            images.forEach(item_ => content_.append("Images", item_.data, item_.fileName ? item_.fileName : "Images") );
         if (productSpecifications !== null && productSpecifications !== undefined)
             content_.append("ProductSpecifications", productSpecifications.toString());
         if (categoryId === null || categoryId === undefined)
@@ -621,7 +623,7 @@ export class ProductClient extends BaseClass {
         return Promise.resolve<number>(<any>null);
     }
 
-    update(id: number | undefined, brandName: string | null | undefined, description: string | null | undefined, shortDescription: string | null | undefined, name: string | null | undefined, farsiName: string | null | undefined, price: number | undefined, image: FileParameter | null | undefined, productSpecifications: string | null | undefined, categoryId: number | undefined): Promise<number> {
+    update(id: number | undefined, brandName: string | null | undefined, description: string | null | undefined, shortDescription: string | null | undefined, name: string | null | undefined, farsiName: string | null | undefined, price: number | undefined, addedImages: FileParameter[] | null | undefined, removedImages: string[] | null | undefined, productSpecifications: string | null | undefined, categoryId: number | undefined): Promise<number> {
         let url_ = this.baseUrl + "/Product/UpdateProduct";
         url_ = url_.replace(/[?&]$/, "");
 
@@ -644,8 +646,10 @@ export class ProductClient extends BaseClass {
             throw new Error("The parameter 'price' cannot be null.");
         else
             content_.append("Price", price.toString());
-        if (image !== null && image !== undefined)
-            content_.append("Image", image.data, image.fileName ? image.fileName : "Image");
+        if (addedImages !== null && addedImages !== undefined)
+            addedImages.forEach(item_ => content_.append("AddedImages", item_.data, item_.fileName ? item_.fileName : "AddedImages") );
+        if (removedImages !== null && removedImages !== undefined)
+            content_.append("RemovedImages", removedImages.toString());
         if (productSpecifications !== null && productSpecifications !== undefined)
             content_.append("ProductSpecifications", productSpecifications.toString());
         if (categoryId === null || categoryId === undefined)
@@ -1042,7 +1046,6 @@ export class CategoryDto implements ICategoryDto {
     name?: string | undefined;
     farsiName?: string | undefined;
     image?: string | undefined;
-    content?: string | undefined;
     parentId?: number | undefined;
     specifications?: Specification[] | undefined;
 
@@ -1061,7 +1064,6 @@ export class CategoryDto implements ICategoryDto {
             this.name = _data["name"];
             this.farsiName = _data["farsiName"];
             this.image = _data["image"];
-            this.content = _data["content"];
             this.parentId = _data["parentId"];
             if (Array.isArray(_data["specifications"])) {
                 this.specifications = [] as any;
@@ -1084,7 +1086,6 @@ export class CategoryDto implements ICategoryDto {
         data["name"] = this.name;
         data["farsiName"] = this.farsiName;
         data["image"] = this.image;
-        data["content"] = this.content;
         data["parentId"] = this.parentId;
         if (Array.isArray(this.specifications)) {
             data["specifications"] = [];
@@ -1100,7 +1101,6 @@ export interface ICategoryDto {
     name?: string | undefined;
     farsiName?: string | undefined;
     image?: string | undefined;
-    content?: string | undefined;
     parentId?: number | undefined;
     specifications?: Specification[] | undefined;
 }
@@ -1160,7 +1160,6 @@ export class Category implements ICategory {
     image?: string | undefined;
     isDeleted?: boolean;
     parentId?: number;
-    content?: string | undefined;
     productCategories?: ProductCategory[] | undefined;
     specifications?: Specification[] | undefined;
 
@@ -1181,7 +1180,6 @@ export class Category implements ICategory {
             this.image = _data["image"];
             this.isDeleted = _data["isDeleted"];
             this.parentId = _data["parentId"];
-            this.content = _data["content"];
             if (Array.isArray(_data["productCategories"])) {
                 this.productCategories = [] as any;
                 for (let item of _data["productCategories"])
@@ -1210,7 +1208,6 @@ export class Category implements ICategory {
         data["image"] = this.image;
         data["isDeleted"] = this.isDeleted;
         data["parentId"] = this.parentId;
-        data["content"] = this.content;
         if (Array.isArray(this.productCategories)) {
             data["productCategories"] = [];
             for (let item of this.productCategories)
@@ -1232,7 +1229,6 @@ export interface ICategory {
     image?: string | undefined;
     isDeleted?: boolean;
     parentId?: number;
-    content?: string | undefined;
     productCategories?: ProductCategory[] | undefined;
     specifications?: Specification[] | undefined;
 }
@@ -1297,9 +1293,9 @@ export class Product implements IProduct {
     name?: string | undefined;
     farsiName?: string | undefined;
     price?: number;
-    image?: string | undefined;
     categoryId?: number;
     isDeleted?: boolean;
+    images?: ProductImage[] | undefined;
     cartProducts?: CartProduct[] | undefined;
     productSpecifications?: ProductSpecification[] | undefined;
     productCategories?: ProductCategory[] | undefined;
@@ -1322,9 +1318,13 @@ export class Product implements IProduct {
             this.name = _data["name"];
             this.farsiName = _data["farsiName"];
             this.price = _data["price"];
-            this.image = _data["image"];
             this.categoryId = _data["categoryId"];
             this.isDeleted = _data["isDeleted"];
+            if (Array.isArray(_data["images"])) {
+                this.images = [] as any;
+                for (let item of _data["images"])
+                    this.images!.push(ProductImage.fromJS(item));
+            }
             if (Array.isArray(_data["cartProducts"])) {
                 this.cartProducts = [] as any;
                 for (let item of _data["cartProducts"])
@@ -1359,9 +1359,13 @@ export class Product implements IProduct {
         data["name"] = this.name;
         data["farsiName"] = this.farsiName;
         data["price"] = this.price;
-        data["image"] = this.image;
         data["categoryId"] = this.categoryId;
         data["isDeleted"] = this.isDeleted;
+        if (Array.isArray(this.images)) {
+            data["images"] = [];
+            for (let item of this.images)
+                data["images"].push(item.toJSON());
+        }
         if (Array.isArray(this.cartProducts)) {
             data["cartProducts"] = [];
             for (let item of this.cartProducts)
@@ -1389,12 +1393,60 @@ export interface IProduct {
     name?: string | undefined;
     farsiName?: string | undefined;
     price?: number;
-    image?: string | undefined;
     categoryId?: number;
     isDeleted?: boolean;
+    images?: ProductImage[] | undefined;
     cartProducts?: CartProduct[] | undefined;
     productSpecifications?: ProductSpecification[] | undefined;
     productCategories?: ProductCategory[] | undefined;
+}
+
+export class ProductImage implements IProductImage {
+    id?: number;
+    name?: string | undefined;
+    product?: Product | undefined;
+    productId?: number;
+
+    constructor(data?: IProductImage) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.name = _data["name"];
+            this.product = _data["product"] ? Product.fromJS(_data["product"]) : <any>undefined;
+            this.productId = _data["productId"];
+        }
+    }
+
+    static fromJS(data: any): ProductImage {
+        data = typeof data === 'object' ? data : {};
+        let result = new ProductImage();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["name"] = this.name;
+        data["product"] = this.product ? this.product.toJSON() : <any>undefined;
+        data["productId"] = this.productId;
+        return data; 
+    }
+}
+
+export interface IProductImage {
+    id?: number;
+    name?: string | undefined;
+    product?: Product | undefined;
+    productId?: number;
 }
 
 export class CartProduct implements ICartProduct {
@@ -1450,6 +1502,7 @@ export class ProductSpecification implements IProductSpecification {
     specificationId?: number;
     productId?: number;
     product?: Product | undefined;
+    specification?: Specification | undefined;
     specificationValue?: string | undefined;
 
     constructor(data?: IProductSpecification) {
@@ -1467,6 +1520,7 @@ export class ProductSpecification implements IProductSpecification {
             this.specificationId = _data["specificationId"];
             this.productId = _data["productId"];
             this.product = _data["product"] ? Product.fromJS(_data["product"]) : <any>undefined;
+            this.specification = _data["specification"] ? Specification.fromJS(_data["specification"]) : <any>undefined;
             this.specificationValue = _data["specificationValue"];
         }
     }
@@ -1484,6 +1538,7 @@ export class ProductSpecification implements IProductSpecification {
         data["specificationId"] = this.specificationId;
         data["productId"] = this.productId;
         data["product"] = this.product ? this.product.toJSON() : <any>undefined;
+        data["specification"] = this.specification ? this.specification.toJSON() : <any>undefined;
         data["specificationValue"] = this.specificationValue;
         return data; 
     }
@@ -1494,6 +1549,7 @@ export interface IProductSpecification {
     specificationId?: number;
     productId?: number;
     product?: Product | undefined;
+    specification?: Specification | undefined;
     specificationValue?: string | undefined;
 }
 
@@ -1597,7 +1653,7 @@ export class ProductCategoryDto implements IProductCategoryDto {
     name?: string | undefined;
     farsiName?: string | undefined;
     price?: number;
-    image?: string | undefined;
+    images?: string[] | undefined;
     lastCategoryId?: number;
     categoryId?: number;
     categoryName?: string | undefined;
@@ -1621,7 +1677,11 @@ export class ProductCategoryDto implements IProductCategoryDto {
             this.name = _data["name"];
             this.farsiName = _data["farsiName"];
             this.price = _data["price"];
-            this.image = _data["image"];
+            if (Array.isArray(_data["images"])) {
+                this.images = [] as any;
+                for (let item of _data["images"])
+                    this.images!.push(item);
+            }
             this.lastCategoryId = _data["lastCategoryId"];
             this.categoryId = _data["categoryId"];
             this.categoryName = _data["categoryName"];
@@ -1645,7 +1705,11 @@ export class ProductCategoryDto implements IProductCategoryDto {
         data["name"] = this.name;
         data["farsiName"] = this.farsiName;
         data["price"] = this.price;
-        data["image"] = this.image;
+        if (Array.isArray(this.images)) {
+            data["images"] = [];
+            for (let item of this.images)
+                data["images"].push(item);
+        }
         data["lastCategoryId"] = this.lastCategoryId;
         data["categoryId"] = this.categoryId;
         data["categoryName"] = this.categoryName;
@@ -1662,7 +1726,7 @@ export interface IProductCategoryDto {
     name?: string | undefined;
     farsiName?: string | undefined;
     price?: number;
-    image?: string | undefined;
+    images?: string[] | undefined;
     lastCategoryId?: number;
     categoryId?: number;
     categoryName?: string | undefined;
@@ -1721,7 +1785,7 @@ export class ProductDto implements IProductDto {
     name?: string | undefined;
     farsiName?: string | undefined;
     price?: number;
-    image?: string | undefined;
+    images?: string[] | undefined;
     categoryId?: number;
     specifications?: KeyValueSpecification[] | undefined;
 
@@ -1743,7 +1807,11 @@ export class ProductDto implements IProductDto {
             this.name = _data["name"];
             this.farsiName = _data["farsiName"];
             this.price = _data["price"];
-            this.image = _data["image"];
+            if (Array.isArray(_data["images"])) {
+                this.images = [] as any;
+                for (let item of _data["images"])
+                    this.images!.push(item);
+            }
             this.categoryId = _data["categoryId"];
             if (Array.isArray(_data["specifications"])) {
                 this.specifications = [] as any;
@@ -1769,7 +1837,11 @@ export class ProductDto implements IProductDto {
         data["name"] = this.name;
         data["farsiName"] = this.farsiName;
         data["price"] = this.price;
-        data["image"] = this.image;
+        if (Array.isArray(this.images)) {
+            data["images"] = [];
+            for (let item of this.images)
+                data["images"].push(item);
+        }
         data["categoryId"] = this.categoryId;
         if (Array.isArray(this.specifications)) {
             data["specifications"] = [];
@@ -1788,7 +1860,7 @@ export interface IProductDto {
     name?: string | undefined;
     farsiName?: string | undefined;
     price?: number;
-    image?: string | undefined;
+    images?: string[] | undefined;
     categoryId?: number;
     specifications?: KeyValueSpecification[] | undefined;
 }

@@ -76,7 +76,6 @@ const CategoryTree = ({ show, handleClose, specifications, setSpecifications }) 
                         {specifications.length != 0 && <span>ویژگی های محصول:</span>}
                         {specifications.length != 0 && showSpecifications(methods, specifications)}
                     </div>
-                    <div className="inputErrorStyle">  {errors?.productSpecifications?.message}</div>
 
 
 

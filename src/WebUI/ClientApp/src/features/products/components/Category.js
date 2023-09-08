@@ -30,7 +30,7 @@ const Category = () => {
                                         <div key={index}>
                                             <Link to={`/search/${item.name}`}>
                                                 <div style={{ display: "flex", flexDirection: "column" }}>
-                                                    <img width="60px" height="60px" src={`data:image/jpeg;base64,${item.content}`} />
+                                                    <img width="60px" height="60px" src={`/images/category/${item.image}`} />
                                                     <span>{item.farsiName}</span>
                                                 </div>
                                             </Link>
@@ -50,3 +50,5 @@ const Category = () => {
 Category.propTypes = {};
 
 export default Category;
+
+                                                    //<img width="60px" height="60px" src={`data:image/jpeg;base64,${item.content}`} />

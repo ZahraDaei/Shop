@@ -34,35 +34,27 @@ namespace Shop.Application.ProductCategories.Queries.GetProductCategory
             {
 
                 var productCategoryVm = new ProductCategoryVm();
-                var product_category = await _context.ProductCategories.ToListAsync();
 
-                var products = await _context.Products.ToListAsync();
-                var categories = await _context.Categories.ToListAsync();
-               
-
-                productCategoryVm.ProductCategoryDtos = from pc in product_category
-                                                        join p in products on pc.ProductId equals p.Id
-                                                        join c in categories on pc.CategoryId equals c.Id
-                                                        
-                                                        select new ProductCategoryDto
-                                                        {
-                                                            BrandName = p.BrandName,
-                                                            CategoryId = c.Id,
-                                                            LastCategoryId = p.CategoryId,
-                                                            ProductId = p.Id,
-                                                            CategoryFarsiName = c.FarsiName,
-                                                            CategoryName = c.Name,
-                                                            Name = p.Name,
-                                                            FarsiName = p.FarsiName,
-                                                            Description = p.Description,
-                                                            Image = p.Image,
-                                                            Price = p.Price,
-                                                            ShortDescription = p.ShortDescription,
-                                                        };
-
+                var products = await _context.Products.Include(q => q.Images)
+                    .Include(m => m.ProductCategories)
+                    .ThenInclude(f => f.Category)
+                    .Select(t => new ProductCategoryDto
+                    {
+                        BrandName = t.BrandName,
+                        LastCategoryId = t.CategoryId,
+                        CategoryId = t.ProductCategories.Where(c => c.CategoryId == t.CategoryId).Select(x => x.Category.Id).FirstOrDefault(),
+                        ProductId = t.Id,
+                        CategoryFarsiName = t.ProductCategories.Where(c => c.CategoryId == t.CategoryId).Select(c => c.Category.FarsiName).FirstOrDefault(),
+                        CategoryName = t.ProductCategories.Where(c => c.CategoryId == t.CategoryId).Select(c => c.Category.Name).FirstOrDefault(),
+                        Name = t.Name,
+                        FarsiName = t.FarsiName,
+                        Description = t.Description,
+                        Images = t.Images.Select(g => g.Name).ToList(),
+                        Price = t.Price,
+                        ShortDescription = t.ShortDescription,
+                    })
+                    .ToListAsync();
                 return productCategoryVm;
-
-
             }
             catch (Exception e)
             {

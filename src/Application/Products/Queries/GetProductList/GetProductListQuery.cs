@@ -34,50 +34,29 @@ namespace Shop.Application.Products.Queries.GetProductList
             try
             {
 
-                var productDtos = await _context.Products.ToListAsync();
 
 
                 var productVm = new ProductVm();
-                var product_category = await _context.ProductCategories.ToListAsync();
 
-                var products = await _context.Products.ToListAsync();
-                var categories = await _context.Categories.ToListAsync();
-                var product_specifications = await _context.ProductSpecifications.ToListAsync();
-                var specification = await _context.Specifications.ToListAsync();
-
-                var joined_product_specification = from ps in product_specifications
-                                                   join s in specification on ps.SpecificationId equals s.Id
-                                                   select new
-                                                   {
-                                                       ProductId = ps.ProductId,
-                                                       Specification = new KeyValueSpecification() { Key = s.SpecificationKey, Value = ps.SpecificationValue },
-
-                                                   };
-
-                var grouped_product_specification = from jps in joined_product_specification
-                                                    group jps.Specification by jps.ProductId into g
-                                                    select new
-                                                    { ProductId = g.Key, Specification = g.ToList() };
-
-                productVm.ProductDtos = from p in products
-                                        join gps in grouped_product_specification on p.Id equals gps.ProductId
-                                        where p.IsDeleted==false
-                                        select new ProductDto
-                                        {
-                                            BrandName = p.BrandName,
-                                            Id = p.Id,
-                                            Name = p.Name,
-                                            FarsiName = p.FarsiName,
-                                            Description = p.Description,
-                                            Image = p.Image,
-                                            Price = p.Price,
-                                            ShortDescription = p.ShortDescription,
-                                            Specifications = gps.Specification,
-                                            CategoryId=p.CategoryId,
-                                        };
-
-
-
+                 productVm.ProductDtos = await _context.Products.Where(h => !h.IsDeleted)
+                    .Include(q=>q.Images)
+                    .Include(p => p.ProductSpecifications)
+                    .ThenInclude(x => x.Specification).Select(f => new ProductDto
+                    {
+                        BrandName = f.BrandName,
+                        Id = f.Id,
+                        Name = f.Name,
+                        FarsiName = f.FarsiName,
+                        Description = f.Description,
+                        Images = f.Images.Select(p=>p.Name).ToList(),
+                        Price = f.Price,
+                        ShortDescription = f.ShortDescription,
+                        Specifications = f.ProductSpecifications.Select(k => 
+                        new KeyValueSpecification()
+                        { Key = k.Specification.SpecificationKey, Value = k.SpecificationValue }),
+                        CategoryId = f.CategoryId,
+                    }).ToListAsync();             
+               
 
                 return productVm;
             }

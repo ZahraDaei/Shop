@@ -14,7 +14,7 @@ namespace Shop.Domain.Entities
         public string Image { get; set; }
         public bool IsDeleted { get; set; }
         public long ParentId { get; set; }
-        public byte[] Content { get; set; }
+       // public byte[] Content { get; set; }
         public ICollection<ProductCategory> ProductCategories { get; set; }
         public ICollection<Specification> Specifications { get; set; }
     }

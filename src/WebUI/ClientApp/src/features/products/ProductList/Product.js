@@ -8,9 +8,7 @@ import {
 import Breadcrumbs from "../components/Breadcrumbs";
 import Category from "../components/Category";
 import "../Product.css";
-import {
-    selectLoadingProductCategoryList
-} from "../productSlice";
+
 import AdvanceSearch from "./AdvancedSearch/AdvanceSearch";
 import ProductList from "./components/ProductList";
 
@@ -19,7 +17,6 @@ const Product = () => {
     const { categoryName } = useParams();
 
     const dispatch = useDispatch()
-    const loading = useSelector(selectLoadingProductCategoryList);
 
 
     useEffect(() => {
@@ -34,10 +31,6 @@ const Product = () => {
 
 
 
-    if (loading) {
-        return <div>در حال بارگزاری...</div>
-    }
-    else {
 
         return (
             <div >
@@ -54,7 +47,7 @@ const Product = () => {
                 </Row>
             </div>
         );
-    }
+    
 }
 
 

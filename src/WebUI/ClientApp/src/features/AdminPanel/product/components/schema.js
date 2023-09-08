@@ -34,11 +34,11 @@ import * as yup from "yup";
 
         productCategory: yup.mixed().test("productCategory", "انتخاب دسته بندی الزامی است", (value) => { console.log("shosho", typeof(value)); return value?.length }),
 
-        image: yup.mixed().test("fileNessesary", "بارگزاری تصویر الزامی است", (value) => { return value?.length })
-            .test("fileSize", "حجم فایل بالاتر از حد مجاز است!", (value) => {
-                if (value.length)
-                    return value[0].size <= 100000
-            }),
+        image: yup.mixed().test("fileNessesary", "بارگزاری تصویر الزامی است", (value) => { return value?.length }),
+            //.test("fileSize", "حجم فایل بالاتر از حد مجاز است!", (value) => {
+            //    if (value.length)
+            //        return value[0].size <= 100000
+            //}),
     }).required();
 
 export default schema;

@@ -46,12 +46,8 @@ namespace Shop.Application.Categories.Queries.GetCategory
             {
 
                 throw;
-            }
-           
+            }           
         }
-
-   
-
     }
 }
 

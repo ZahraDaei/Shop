@@ -12,6 +12,7 @@ namespace Shop.Domain.Entities
         //public Specification Specification { get; set; }
         public long ProductId { get; set; }
         public Product Product { get; set; }
+        public Specification Specification { get; set; }
         public string SpecificationValue { get; set; }
     }
 }

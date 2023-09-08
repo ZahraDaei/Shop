@@ -13,7 +13,7 @@ import CategoryTree from "./CategoryTree";
 import schema from "./schema";
 
 export default function CreateProduct() {
-    const [file, setFile] = useState();
+    const [files, setFiles] = useState();
     const [specifications, setSpecifications] = useState([]);
     const [content, setContent] = useState();
     const [show, setShow] = useState(false);
@@ -24,7 +24,7 @@ export default function CreateProduct() {
 
         setShow(true);
     }
-
+    console.log(files);
     const products = useSelector(selectProducts);
 
     var catLoading = useSelector(selectLoadingTree);
@@ -42,12 +42,12 @@ export default function CreateProduct() {
     const onSubmit = data => {
         data.name = data.name.trim().toLowerCase();
         data.farsiName = data.farsiName.trim().toLowerCase();
-        data.image = file;
+        data.images = files;
         // data.specifications = data.specifications.map(item=>item=item.specificationKey)
         dispatch({ type: 'PRODUCT_CREATE_START', payload: data });
-        methods.reset();
-        setFile(null);
-        setSpecifications([]);
+       // methods.reset();
+       // setFiles(null);
+      //  setSpecifications([]);
     };
 
 
@@ -66,7 +66,7 @@ export default function CreateProduct() {
     }
 
     const DisplayCategory = () => {
-       return  categoryList.filter(x => x.id == methods.getValues('productCategory'))[0]?.farsiName 
+        return categoryList.filter(x => x.id == methods.getValues('productCategory'))[0]?.farsiName
     }
 
 
@@ -115,25 +115,41 @@ export default function CreateProduct() {
                             </div>
                             <div className="inputBoxStyle ">
                                 <label >تصویر:</label>
-                                <Button variant="primary" ><label htmlFor="files" >انتخاب تصویر</label></Button>
+                                <Button variant="primary" ><label htmlFor="imgfiles" >انتخاب تصویر</label></Button>
 
                                 <input
-                                    id="files"
+                                    id="imgfiles"
                                     type="file"
-                                    {...methods.register('image', { onChange: (e) => setFile(e.target.files[0]) })}
+                                    multiple
+                                    {...methods.register('image', {
+                                        onChange: (e) => {
+                                            var imageFiles = [];
+                                            var objFiles = e.target.files;
+                                            for (var i = 0; i < objFiles.length; i++) {
+                                                imageFiles = [... imageFiles,objFiles[i]]
+                                            }
+                                            setFiles(imageFiles)
+                                        }
+                                    })}
                                     style={{ visibility: "hidden" }}
                                     accept="image/png, image/jpeg" />
-                                <div style={{ height: "40px" }}> {file?.name}</div>
+                                <div style={{ height: "40px" }}> {files?.map(x => <div>{x.name}</div>)}</div>
                             </div>
                             <div className="inputErrorStyle">  {errors?.image?.message}</div>
-
+                            <img
+                                src={`${methods.getValues("image")}`}
+                                alt="MISSING JPG"
+                                style={{ maxWidth: "20%" }}
+                            />
                             <div className="mb-2 d-flex flex-direction-row">
                                 <label >دسته بندی:</label>
                                 <Button variant="primary" onClick={handleClick}>
                                     انتخاب دسته بندی
                                 </Button>
-                                <div className="mr-3">{DisplayCategory() }</div>
+                                <div className="mr-3">{DisplayCategory()}</div>
                                 <CategoryTree show={show} handleClose={handleClose} specifications={specifications} setSpecifications={setSpecifications} />
+                                <div className="inputErrorStyle">  {errors?.productSpecifications?.message}</div>
+
                             </div>
 
 
@@ -157,7 +173,7 @@ export default function CreateProduct() {
                 </div>
             )
         }
-    }, [catLoading, file, errors, products, catListLoading, specifications, show])
+    }, [catLoading, files, errors, products, catListLoading, specifications, show])
     return (
         <Container>
             <Alert variant={useSelector(selectAlert).variant} show={Boolean(useSelector(selectAlert).variant)} >

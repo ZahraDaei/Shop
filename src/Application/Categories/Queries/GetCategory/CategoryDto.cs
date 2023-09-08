@@ -10,10 +10,8 @@ namespace Shop.Application.Categories.Queries.GetCategory
         public string Name { get; set; }
         public string FarsiName { get; set; }
         public string Image { get; set; }
-        public byte[] Content { get; set; }
+        //public byte[] Content { get; set; }
         public long? ParentId { get; set; }
         public ICollection<Specification> Specifications { get; set; }
-
-
     }
 }

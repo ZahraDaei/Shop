@@ -28,7 +28,8 @@ namespace Shop.Application.Products.Commands.CreateProduct
         public string Name { get; set; }
         public string FarsiName { get; set; }
         public decimal Price { get; set; }
-        public IFormFile Image { get; set; }
+        public List<IFormFile> AddedImages { get; set; }
+        public List<string> RemovedImages { get; set; }
         public string ProductSpecifications { get; set; }
         public long CategoryId { get; set; }
 
@@ -41,7 +42,8 @@ namespace Shop.Application.Products.Commands.CreateProduct
         private readonly IWebHostEnvironment _hostingEnvironment;
         private CancellationToken _cancellationToken;
 
-        public UpdateProductCommandHandler(IApplicationDbContext context, IMediator mediator, IWebHostEnvironment environment)
+        public UpdateProductCommandHandler(IApplicationDbContext context,
+            IMediator mediator, IWebHostEnvironment environment)
         {
             _context = context;
             _mediator = mediator;
@@ -58,11 +60,10 @@ namespace Shop.Application.Products.Commands.CreateProduct
                 err.Errors.Add("محصول", new string[] { "وجود ندارد" });
                 throw err;
             }
-            await UpdateImage(product, request);
+            await UpdateImage(product, request, cancellationToken);
             product.BrandName = request.BrandName;
             product.Description = request.Description;
             product.FarsiName = request.FarsiName;
-            product.Image = request.Image.FileName;
             product.Name = request.Name;
             product.Price = request.Price;
             product.ShortDescription = request.ShortDescription;
@@ -78,40 +79,49 @@ namespace Shop.Application.Products.Commands.CreateProduct
             return product.Id;
         }
 
-        private async Task UpdateImage(Product product, UpdateProductCommand request)
+        private async Task UpdateImage(Product product, UpdateProductCommand request, CancellationToken cancellationToken)
         {
-            string imagesPath = Path.Combine(_hostingEnvironment.WebRootPath, "images");
+            string imagesPath = Path.Combine(_hostingEnvironment.WebRootPath, "images/product");
             var files = Directory.GetFiles(imagesPath);
-            var file = request.Image;
-            var imgName = file.FileName;
-            foreach (var item in files)
+
+            foreach (var item in request.RemovedImages)
             {
-                if (item.Contains($"\\{imgName}")&& imgName != product.Image)
+                var entity = await _context.ProductImages.Where(i => i.ProductId == product.Id && i.Name == item).FirstOrDefaultAsync();
+                _context.ProductImages.Remove(entity);
+                foreach (var file in files)
                 {
-                    var err = new ValidationException();
-                    err.Errors.Add("محصول", new string[] { "نام عکس تکراری است" });
-                    throw err;
-                }
-                else if (item.Contains($"\\{imgName}") && imgName == product.Image)
-                {
-                    File.Delete(item);
-                    break;
+                    if (file.Contains($"\\{item}"))
+                    {
+                        File.Delete(item);
+                        break;
+                    }
                 }
             }
-            string filePath = Path.Combine(imagesPath, imgName);
-            if (file.Length > 0)
-            {
-                using (Stream fileStream = new FileStream(filePath, FileMode.Create))
-                {
-                    await file.CopyToAsync(fileStream);
-                }
+            await _context.SaveChangesAsync(cancellationToken);
 
-                using (Stream fileStream = new FileStream(filePath, FileMode.Create))
+            foreach (var file in request.AddedImages)
+            {
+                var imgName = file.FileName;
+                string filePath = Path.Combine(imagesPath, imgName);
+                foreach (var item in files)
                 {
-                    await file.CopyToAsync(fileStream);
+                    if (item.Contains($"\\{imgName}"))
+                    {
+                        var err = new ValidationException();
+                        err.Errors.Add("محصول", new string[] { "نام عکس تکراری است" });
+                        throw err;
+                    }
+                }
+                if (file.Length > 0)
+                {
+                    using (Stream fileStream = new FileStream(filePath, FileMode.Create))
+                    {
+                        await file.CopyToAsync(fileStream);
+                    }
                 }
             }
         }
+
 
         private async Task RemoveProductSpecifications(Product product)
         {

@@ -19,6 +19,7 @@ namespace Shop.Application.Common.Interfaces
          DbSet<ShoppingCart> ShoppingCarts { get; set; }
          DbSet<Specification> Specifications { get; set; }
          DbSet<ProductCategory> ProductCategories { get; set; }
+         DbSet<ProductImage> ProductImages { get; set; }
          DbSet<ProductSpecification> ProductSpecifications { get; set; }
 
         Task<int> SaveChangesAsync(CancellationToken cancellationToken);

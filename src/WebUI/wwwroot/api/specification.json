@@ -284,10 +284,17 @@
                     "type": "string",
                     "nullable": true
                   },
-                  "ImageContent": {
+                  "AddedImage": {
                     "type": "string",
                     "format": "binary",
                     "nullable": true
+                  },
+                  "RemovedImage": {
+                    "type": "array",
+                    "nullable": true,
+                    "items": {
+                      "type": "string"
+                    }
                   },
                   "ParentId": {
                     "type": "integer",
@@ -456,10 +463,13 @@
                     "type": "number",
                     "format": "decimal"
                   },
-                  "Image": {
-                    "type": "string",
-                    "format": "binary",
-                    "nullable": true
+                  "Images": {
+                    "type": "array",
+                    "nullable": true,
+                    "items": {
+                      "type": "string",
+                      "format": "binary"
+                    }
                   },
                   "ProductSpecifications": {
                     "type": "string",
@@ -529,10 +539,20 @@
                     "type": "number",
                     "format": "decimal"
                   },
-                  "Image": {
-                    "type": "string",
-                    "format": "binary",
-                    "nullable": true
+                  "AddedImages": {
+                    "type": "array",
+                    "nullable": true,
+                    "items": {
+                      "type": "string",
+                      "format": "binary"
+                    }
+                  },
+                  "RemovedImages": {
+                    "type": "array",
+                    "nullable": true,
+                    "items": {
+                      "type": "string"
+                    }
                   },
                   "ProductSpecifications": {
                     "type": "string",
@@ -775,11 +795,6 @@
             "type": "string",
             "nullable": true
           },
-          "content": {
-            "type": "string",
-            "format": "byte",
-            "nullable": true
-          },
           "parentId": {
             "type": "integer",
             "format": "int64",
@@ -846,11 +861,6 @@
           "parentId": {
             "type": "integer",
             "format": "int64"
-          },
-          "content": {
-            "type": "string",
-            "format": "byte",
-            "nullable": true
           },
           "productCategories": {
             "type": "array",
@@ -934,16 +944,19 @@
             "type": "number",
             "format": "decimal"
           },
-          "image": {
-            "type": "string",
-            "nullable": true
-          },
           "categoryId": {
             "type": "integer",
             "format": "int64"
           },
           "isDeleted": {
             "type": "boolean"
+          },
+          "images": {
+            "type": "array",
+            "nullable": true,
+            "items": {
+              "$ref": "#/components/schemas/ProductImage"
+            }
           },
           "cartProducts": {
             "type": "array",
@@ -965,6 +978,32 @@
             "items": {
               "$ref": "#/components/schemas/ProductCategory"
             }
+          }
+        }
+      },
+      "ProductImage": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "product": {
+            "nullable": true,
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/Product"
+              }
+            ]
+          },
+          "productId": {
+            "type": "integer",
+            "format": "int64"
           }
         }
       },
@@ -1015,6 +1054,14 @@
             "oneOf": [
               {
                 "$ref": "#/components/schemas/Product"
+              }
+            ]
+          },
+          "specification": {
+            "nullable": true,
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/Specification"
               }
             ]
           },
@@ -1090,9 +1137,12 @@
             "type": "number",
             "format": "decimal"
           },
-          "image": {
-            "type": "string",
-            "nullable": true
+          "images": {
+            "type": "array",
+            "nullable": true,
+            "items": {
+              "type": "string"
+            }
           },
           "lastCategoryId": {
             "type": "integer",
@@ -1157,9 +1207,12 @@
             "type": "number",
             "format": "decimal"
           },
-          "image": {
-            "type": "string",
-            "nullable": true
+          "images": {
+            "type": "array",
+            "nullable": true,
+            "items": {
+              "type": "string"
+            }
           },
           "categoryId": {
             "type": "integer",
