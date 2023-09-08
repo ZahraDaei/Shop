@@ -36,7 +36,7 @@ namespace Shop.Application.Products.Queries.GetProductList
             {
                 var productDto = new ProductDto();
 
-                productDto = await _context.Products.Where(h => !h.IsDeleted && h.Id == request.Id)
+                productDto = await _context.Products.Where(h => h.IsDeleted ==false&& h.Id == request.Id)
                    .Include(q => q.Images)
                    .Include(p => p.ProductSpecifications)
                    .ThenInclude(x => x.Specification).Select(f => new ProductDto

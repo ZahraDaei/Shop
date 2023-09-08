@@ -35,23 +35,23 @@ namespace Shop.Application.ProductCategories.Queries.GetProductCategory
 
                 var productCategoryVm = new ProductCategoryVm();
 
-                var products = await _context.Products.Include(q => q.Images)
-                    .Include(m => m.ProductCategories)
-                    .ThenInclude(f => f.Category)
+                productCategoryVm.ProductCategoryDtos = await _context.ProductCategories.Include(q => q.Product)
+                    .ThenInclude(f => f.Images)
+                    .Include(m => m.Category)
                     .Select(t => new ProductCategoryDto
                     {
-                        BrandName = t.BrandName,
-                        LastCategoryId = t.CategoryId,
-                        CategoryId = t.ProductCategories.Where(c => c.CategoryId == t.CategoryId).Select(x => x.Category.Id).FirstOrDefault(),
-                        ProductId = t.Id,
-                        CategoryFarsiName = t.ProductCategories.Where(c => c.CategoryId == t.CategoryId).Select(c => c.Category.FarsiName).FirstOrDefault(),
-                        CategoryName = t.ProductCategories.Where(c => c.CategoryId == t.CategoryId).Select(c => c.Category.Name).FirstOrDefault(),
-                        Name = t.Name,
-                        FarsiName = t.FarsiName,
-                        Description = t.Description,
-                        Images = t.Images.Select(g => g.Name).ToList(),
-                        Price = t.Price,
-                        ShortDescription = t.ShortDescription,
+                        BrandName =t.Product.BrandName,
+                        LastCategoryId = t.Product.CategoryId,
+                        CategoryId = t.CategoryId,
+                        ProductId = t.ProductId,
+                        CategoryFarsiName = t.Category.FarsiName,
+                        CategoryName = t.Category.Name,
+                        Name = t.Product.Name,
+                        FarsiName = t.Product.FarsiName,
+                        Description = t.Product.FarsiName,
+                        Images = t.Product.Images.Select(g => g.Name).ToList(),
+                        Price = t.Product.Price,
+                        ShortDescription = t.Product.ShortDescription,
                     })
                     .ToListAsync();
                 return productCategoryVm;

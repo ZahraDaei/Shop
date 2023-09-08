@@ -6,7 +6,7 @@ const ProductCard = ({ item }) => {
     return (
         <div className="productCard">
             <Link to={`/productdetail/${item.productId}`}>
-                <img src={`/images/${item.image}`} style={{ maxWidth: "100%" }} />
+                <img src={`/images/product/${item.images[0]}`} style={{ maxWidth: "100%" }} />
             </Link>
             <div style={{ padding: "20px" }}>
                 <div style={{ fontSize: "small", height: "50px" }}>{`${item.farsiName} ${item.shortDescription}`}</div>
