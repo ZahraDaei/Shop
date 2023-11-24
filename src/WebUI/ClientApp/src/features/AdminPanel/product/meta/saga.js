@@ -4,7 +4,7 @@ import { ProductClient, ProductSpecificationKeyValue } from "../../../../client-
 
 
 const CreateProductItem = async (payload) => {
-    var pro = new ProductClient();  
+    var pro = new ProductClient();
     //var productSpec = [];
     //var specs = payload.productSpecifications;
     //for (var i = 0; i < specs.length; i++) {
@@ -13,7 +13,7 @@ const CreateProductItem = async (payload) => {
     //    item.value = specs[i].value;
     //    productSpec = [...productSpec,item]
     //}
-    var spec=JSON.stringify(payload.productSpecifications)
+    var spec = JSON.stringify(payload.productSpecifications)
     return await pro.create(
         payload.brandName,
         payload.description,
@@ -22,7 +22,7 @@ const CreateProductItem = async (payload) => {
         payload.farsiName,
         +payload.price,
         payload.images.map(x => { return { data: x, fileName: x.name } }),
-        spec, 
+        spec,
         payload.productCategory);
 }
 
@@ -32,13 +32,13 @@ function* createProduct(action) {
     try {
         const result = yield call(CreateProductItem, action.payload);
         if (Boolean(result)) {
-        yield put({ type: "PRODUCT_CREATE_SUCCEEDED" });
+            yield put({ type: "PRODUCT_CREATE_SUCCEEDED" });
             yield put({ type: "PRODUCT_FETCH_START" });
-            yield put({ type: "alert/showAlert", payload: {variant:"success",message:"عملیات ایجاد محصول با موفقیت انجام شد"} });
+            yield put({ type: "alert/showAlert", payload: { variant: "success", message: "عملیات ایجاد محصول با موفقیت انجام شد" } });
         }
     } catch (e) {
         yield put({ type: "PRODUCT_CREATE_FAILED", message: e.message });
-            yield put({ type: "alert/showAlert", payload: {variant:"danger",message:"خطا در ایجاد محصول  "} });
+        yield put({ type: "alert/showAlert", payload: { variant: "danger", message: "خطا در ایجاد محصول  " } });
     }
 }
 
@@ -50,34 +50,47 @@ export function* watchCreateProduct() {
 
 
 const UpdateProductItem = async (payload) => {
-    var pro = new ProductClient();  
-  
+    var pro = new ProductClient();
+
     var spec = JSON.stringify(payload.productSpecifications)
     return await pro.update(
-        payload.id,        
+        payload.id,
         payload.brandName,
         payload.description,
         payload.shortDescription,
         payload.name,
         payload.farsiName,
         +payload.price,
-        { data: payload.image, fileName: payload.image.name },
-        spec, 
+        payload.image,
+        payload.removedImages,
+        spec,
         payload.productCategory);
 }
 function* updateProduct(action) {
     try {
+
         const result = yield call(UpdateProductItem, action.payload);
         if (Boolean(result)) {
-        yield put({ type: "PRODUCT_UPDATE_SUCCEEDED" });
-            yield put({ type: "PRODUCT_FETCH_START" });
-            yield put({ type: "alert/showAlert", payload: {variant:"success",message:"عملیات به روزرسانی محصول با موفقیت انجام شد"} });
+            yield put({ type: "PRODUCT_UPDATE_SUCCEEDED" });
+            yield put({type: "GET_PRODUCT_BY_ID_START",payload: action.payload.id});
+            yield put({ type: "alert/showAlert", payload: { variant: "success", message: "عملیات به روزرسانی محصول با موفقیت انجام شد" } });
         }
     } catch (e) {
-       // var err =Object.values(e.response.errors).toString();
-        var err = Object.values(JSON.parse(e.response).errors).toString();
-        yield put({ type: "PRODUCT_UPDATE_FAILED", message: err });
-        yield put({ type: "alert/showAlert", payload: { variant: "danger", message: err } });
+        // var err =Object.values(e.response.errors).toString();
+        var err = Object.values(JSON.parse(e.response).errors);
+
+        var errors = "";
+        var errMsg = err.map(x => {
+            if (errors === "") {
+                return errors = x;
+            }else{
+                errors = `${errors}, ${x}`;
+                return errors;
+            }
+        })
+
+        yield put({ type: "PRODUCT_UPDATE_FAILED", message: errMsg });
+        yield put({ type: "alert/showAlert", payload: { variant: "danger", message: errMsg } });
     }
 }
 
@@ -86,20 +99,20 @@ export function* watchUpdateProduct() {
 }
 
 const DeleteProductItem = async (payload) => {
-    var pro = new ProductClient();  
+    var pro = new ProductClient();
     await pro.softDelete(payload);
 }
 function* deleteProduct(action) {
     try {
         yield call(DeleteProductItem, action.payload);
-        
+
         yield put({ type: "PRODUCT_DELETE_SUCCEEDED" });
-            yield put({ type: "PRODUCT_FETCH_START" });
-            yield put({ type: "alert/showAlert", payload: {variant:"success",message:"عملیات حذف محصول با موفقیت انجام شد"} });
-        
+        yield put({ type: "PRODUCT_FETCH_START" });
+        yield put({ type: "alert/showAlert", payload: { variant: "success", message: "عملیات حذف محصول با موفقیت انجام شد" } });
+
     } catch (e) {
         yield put({ type: "PRODUCT_DELETE_FAILED", message: e.message });
-            yield put({ type: "alert/showAlert", payload: {variant:"danger",message:"خطا در حذف محصول  "} });
+        yield put({ type: "alert/showAlert", payload: { variant: "danger", message: "خطا در حذف محصول  " } });
     }
 }
 

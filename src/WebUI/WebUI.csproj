@@ -62,6 +62,11 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Remove="ClientApp\src\vite.config.ts" />
+    <None Remove="ClientApp\src\vite.env.d.ts" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\Application\Application.csproj" />
     <ProjectReference Include="..\Infrastructure\Infrastructure.csproj" />
   </ItemGroup>

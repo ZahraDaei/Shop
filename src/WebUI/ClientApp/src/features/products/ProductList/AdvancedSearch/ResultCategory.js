@@ -17,13 +17,11 @@ const ResultCategory = ({ categoryName }) => {
     const categories = useSelector(selectCategoryList);
     //const catLoading = useSelector(categoryLoading);
     const handleToggle = (event, nodeIds) => {
-        console.log("ttttt", nodeIds)
 
         setExpanded(nodeIds);
     };
 
     const handleSelect = (event, nodeIds) => {
-        console.log("fff", nodeIds)
         var cat = categories.filter(c => c.id === nodeIds)[0];
         history.push(cat.name);
         setSelected(nodeIds);

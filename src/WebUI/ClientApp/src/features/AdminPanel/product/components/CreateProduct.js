@@ -10,7 +10,7 @@ import { Alert, Button, Container, Spinner } from "react-bootstrap";
 import { FormProvider, useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
 import CategoryTree from "./CategoryTree";
-import schema from "./schema";
+import { schema } from "./schema";
 
 export default function CreateProduct() {
     const [files, setFiles] = useState();
@@ -24,7 +24,6 @@ export default function CreateProduct() {
 
         setShow(true);
     }
-    console.log(files);
     const products = useSelector(selectProducts);
 
     var catLoading = useSelector(selectLoadingTree);

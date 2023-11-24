@@ -6,7 +6,6 @@ import { brands } from "../../../data";
 const ResultBrand = () => {
   const filterBrand = (e) => {
     var name = e.target.name;
-    console.log(name);
   };
   return (
     <Wrapper title="برند">

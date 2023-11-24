@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Button, Row, Col, Spinner } from "react-bootstrap";
 import { AppPath } from 'AppPathConstant';
@@ -10,9 +10,9 @@ export default function AdminProductDetail() {
 
     const queryParameters = new URLSearchParams(window.location.search)
     const id = queryParameters.get("id")
-
     const product = useSelector(selectProductById);
     const loading = useSelector(selectLoadingProduct);
+    const [bigImg, setBigImg] = useState(product?.images[0]);
 
     useEffect(() => {
         dispatch({ type: "GET_PRODUCT_BY_ID_START", payload: id })
@@ -23,15 +23,34 @@ export default function AdminProductDetail() {
 
         return (
             <Row style={{ padding: "0 40px" }}>
-                <Col sm={12} lg={4}>
-                    {product.images.map((img, index) => <div style={{maxWidth:"30%"} }>
-                        <img
-                        key={ index}
-                        src={`/images/product/${img}`}
-                        alt={product.name}
-                        style={{ maxWidth: "100%" }}
-                    />
-                    </div>)}
+                <Col sm={12} lg={4} >
+                    <div style={{ height: '80%' }}>
+                        <div style={{ width: "100%", padding: "10px 30px", height: '100%' }}>
+                            <img
+                                style={{ width: '100%', height: '100%' }}
+                                src={`/images/product/${bigImg}`}
+                            />
+                        </div>
+                        <div style={{
+                            display: 'flex',
+                            flexDirection: 'row',
+                            flexWrap: 'wrap',
+                            height: '100px',
+                            cursor: 'point',
+                            width: '100%',
+                            overflowY: 'scroll'
+                        }}>
+                            {product.images.map((img, index) => <div style={{ width: "20%", height: '100%' }}>
+                                <img
+                                    onClick={() => setBigImg(img)}
+                                    key={index}
+                                    src={`/images/product/${img}`}
+                                    alt={product.name}
+                                    style={{ width: "100%", height: '100%', cursor: 'pointer' }}
+                                />
+                            </div>)}
+                        </div>
+                    </div>
                 </Col>
                 <Col sm={12} lg={8}>
                     <div className="d-flex justify-content-start">
@@ -90,7 +109,7 @@ export default function AdminProductDetail() {
 
                             </div>
 
-                            <Button  style={{ float: "left", width: "100%", marginTop: "40px" }} type="button" >
+                            <Button style={{ float: "left", width: "100%", marginTop: "40px" }} type="button" >
                                 <Link className="text-white" to={AppPath.Product}>بازگشت</Link>
                             </Button>
                         </div>

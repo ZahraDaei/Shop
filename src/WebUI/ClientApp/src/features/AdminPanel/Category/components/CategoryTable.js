@@ -28,19 +28,19 @@ export default function CategoryTable() {
     const columns = [{
         dataField: 'id',
         text: 'شناسه',
-        headerStyle: { width: '80px' }
+        headerStyle: { width: '20%' }
     },
     {
         dataField: 'farsiName',
         text: 'نام دسته بندی',
-        headerStyle: { width: "300px" },
+        headerStyle: { width: "50%" },
 
     },
     {
         dataField: '',
         text: '',
         isDummyField: true,
-        headerStyle: { width: '100px' },
+        headerStyle: { width: '30%' },
         formatter: (cell, row, rowIndex) => {
             var id = row.id;
             return (
@@ -57,7 +57,7 @@ export default function CategoryTable() {
     return (<>
         <Container>
             <div style={{display:"flex",justifyContent:"center" }}>
-                <div style={{ maxWidth: "400px" }}>
+                <div style={{ maxWidth: "60%" }}>
                     <BootstrapTable keyField='id' data={categories} columns={columns} pagination={pagination} />
                 </div>
             </div>

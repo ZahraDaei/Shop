@@ -3,19 +3,17 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using Shop.Application.Categories.Queries.GetCategory;
 using Shop.Application.Common.Exceptions;
 using Shop.Application.Common.Interfaces;
 using Shop.Application.Common.Models;
 using Shop.Domain.Entities;
-using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 namespace Shop.Application.Products.Commands.CreateProduct
 {
@@ -29,7 +27,7 @@ namespace Shop.Application.Products.Commands.CreateProduct
         public string FarsiName { get; set; }
         public decimal Price { get; set; }
         public List<IFormFile> AddedImages { get; set; }
-        public List<string> RemovedImages { get; set; }
+        public string RemovedImages { get; set; }
         public string ProductSpecifications { get; set; }
         public long CategoryId { get; set; }
 
@@ -81,25 +79,21 @@ namespace Shop.Application.Products.Commands.CreateProduct
 
         private async Task UpdateImage(Product product, UpdateProductCommand request, CancellationToken cancellationToken)
         {
-            string imagesPath = Path.Combine(_hostingEnvironment.WebRootPath, "images/product");
+            string imagesPath = Path.Combine(_hostingEnvironment.WebRootPath, "images\\product");
             var files = Directory.GetFiles(imagesPath);
 
-            foreach (var item in request.RemovedImages)
-            {
-                var entity = await _context.ProductImages.Where(i => i.ProductId == product.Id && i.Name == item).FirstOrDefaultAsync();
-                _context.ProductImages.Remove(entity);
-                foreach (var file in files)
-                {
-                    if (file.Contains($"\\{item}"))
-                    {
-                        File.Delete(item);
-                        break;
-                    }
-                }
-            }
-            await _context.SaveChangesAsync(cancellationToken);
+            await RemoveImages(files, request.RemovedImages, product, cancellationToken);
 
-            foreach (var file in request.AddedImages)
+            await AddImages(files, request.AddedImages, imagesPath, product.Id, cancellationToken);
+        }
+
+        private async Task AddImages(string[] files, List<IFormFile> addedImages, string imagesPath, long id, CancellationToken cancellationToken)
+        {
+            if (addedImages == null)
+            {
+                return;
+            }
+            foreach (var file in addedImages)
             {
                 var imgName = file.FileName;
                 string filePath = Path.Combine(imagesPath, imgName);
@@ -119,9 +113,39 @@ namespace Shop.Application.Products.Commands.CreateProduct
                         await file.CopyToAsync(fileStream);
                     }
                 }
+
+                foreach (var item in addedImages)
+                {
+                    var imgEntity = new ProductImage() { Name = item.FileName, ProductId = id };
+                    _context.ProductImages.Add(imgEntity);
+                }
+                await _context.SaveChangesAsync(cancellationToken);
             }
         }
 
+        private async Task RemoveImages(string[] files, string removedImages, Product product, CancellationToken cancellationToken)
+        {
+            if (removedImages == null)
+            {
+                return;
+            }
+            string[] removedImgs =
+                         removedImages.Split(",");
+            foreach (var item in removedImgs)
+            {
+                var entity = await _context.ProductImages.Where(i => i.ProductId == product.Id && i.Name == item).FirstOrDefaultAsync();
+                _context.ProductImages.Remove(entity);
+                foreach (var file in files)
+                {
+                    if (file.ToLower().Contains($"{item.ToLower()}"))
+                    {
+                        File.Delete(file);
+                        break;
+                    }
+                }
+            }
+            await _context.SaveChangesAsync(cancellationToken);
+        }
 
         private async Task RemoveProductSpecifications(Product product)
         {

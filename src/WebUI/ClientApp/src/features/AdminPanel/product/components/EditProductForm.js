@@ -3,42 +3,42 @@ import {
 } from 'react-router-dom';
 
 import { yupResolver } from '@hookform/resolvers/yup';
-import { selectAlert } from "features/alert/alertSlice";
 import { selectCategoryList } from "features/category/categorySlice";
-import { selectProductById } from "features/products/productSlice";
-import React, { useState } from "react";
+import React, { useState ,useEffect} from "react";
 import { Alert, Button, Container } from "react-bootstrap";
 import { FormProvider, useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
 import CategoryTree from "./CategoryTree";
-import schema from "./schema";
+import {editSchema} from "./schema";
 import { AiOutlineDelete } from "react-icons/ai";
+
+import { selectProductById } from "features/products/productSlice";
+import { selectAlert } from "features/alert/alertSlice";
 
 
 export default function EditProductForm() {
 
-    const history = useHistory();
-
     const product = useSelector(selectProductById);
-
-    const [file, setFile] = useState();
+    const alert = useSelector(selectAlert);
+    const history = useHistory();
+    const [files, setFiles] = useState();
     const [specifications, setSpecifications] = useState([]);
     const [show, setShow] = useState(false);
+    const [editImages, setEditImages] = useState(product.images);
     const handleClose = () => setShow(false);
+    useEffect(() => {
+        setEditImages(product.images);
+        setFiles(null);
+    }, [product])
 
     const handleClick = () => {
         setShow(true);
     }
 
-    //useEffect(() => {
-    //    return () => dispatch(clearProduct()); // <-- reset when unmounting
-    //}, []);
-
-
     var categoryList = useSelector(selectCategoryList);
 
     const dispatch = useDispatch()
-
+    var schema = editSchema(editImages);
     const methods = useForm({
         resolver: yupResolver(schema), defaultValues: {
             //productCategories: [],
@@ -59,7 +59,18 @@ export default function EditProductForm() {
         data.id = product.id;
         data.name = data.name.trim().toLowerCase();
         data.farsiName = data.farsiName.trim().toLowerCase();
-        data.image = file;
+        //const formData = new FormData();
+        //for (var i = 0; i < files.length; i++) {
+        //    formData.Append(`image[${i}]`, files[i])
+        //}
+        var fileParameters = [];
+        for (var i = 0; i < files?.length; i++) {
+            fileParameters.push({ data: files[i], fileName: files[i].name  })
+        }
+        data.image = fileParameters;
+
+        data.removedImages = product.images?.filter(x => !editImages.includes(x));
+//console.log("focoha", removedImgs);
         // data.specifications = data.specifications.map(item=>item=item.specificationKey)
         dispatch({ type: 'PRODUCT_UPDATE_START', payload: data });
         // methods.reset();
@@ -77,8 +88,14 @@ export default function EditProductForm() {
         return categoryList.filter(x => x.id == methods.getValues('productCategory'))[0]?.farsiName;
     }
 
-    const alert = useSelector(selectAlert);
 
+    const RemoveImage = (e,item) => {
+        var index = editImages.indexOf(item);
+        var imgs = editImages.filter(function (image) {
+            return image !== item
+        });
+        setEditImages(imgs);
+    }
 
     return <Container>
         <Alert variant={alert.variant} show={Boolean(alert.variant)} >
@@ -129,20 +146,24 @@ export default function EditProductForm() {
                                 id="files"
                                 multiple
                                 type="file"
-                                {...methods.register('image', { onChange: (e) => setFile(e.target.files[0]) })}
+                                {...methods.register("image", { onChange: (e) => setFiles(e.target.files) })}
                                 style={{ visibility: "hidden" }}
-                                accept="image/png, image/jpeg" />
-                            <div style={{ height: "40px" }}> {file?.name ?? methods.getValues("image")}</div>
+                                accept="image/*" />
+                            <div style={{ height: "40px" }}>
+                                {
+                                    files && Object.values(files).map(x => <span style={{marginRight:"10px"} }>{x.name}</span>)
+
+                                }</div>
                         </div>
                         <div className="inputErrorStyle">  {errors?.image?.message}</div>
-                        <div className=" d-flex flex-row m-2">
-                            {product.images.map(x =>
-                                <div className="border border-secondary rounded text-center m-2" style={{ maxWidth: "20%" }}>
-                                    <AiOutlineDelete style={{height:"20%",width:"20%"} }/>
+                        <div className=" d-flex flex-row m-2" style={{flexWrap:'wrap', overflow:'scroll', maxHeight:'200px'}}>
+                            {editImages?.map((x,index) =>
+                                <div key={index } className="border border-secondary rounded text-center m-2" style={{ maxWidth: "20%" }}>
+                                    <AiOutlineDelete style={{ height: "20%", width: "20%",cursor:"pointer" }} onClick={(e)=>RemoveImage(e,x)} />
                                     <img
                                         src={`/images/product/${x}`}
                                         alt={product.name}
-                                        style={{ maxWidth: "100%",maxHeight:"75%" }}
+                                        style={{ maxWidth: "100%", maxHeight: "75%" }}
                                     />
                                 </div>
                             )

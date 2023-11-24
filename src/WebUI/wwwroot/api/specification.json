@@ -548,11 +548,8 @@
                     }
                   },
                   "RemovedImages": {
-                    "type": "array",
-                    "nullable": true,
-                    "items": {
-                      "type": "string"
-                    }
+                    "type": "string",
+                    "nullable": true
                   },
                   "ProductSpecifications": {
                     "type": "string",

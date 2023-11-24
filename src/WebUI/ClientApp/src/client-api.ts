@@ -623,7 +623,7 @@ export class ProductClient extends BaseClass {
         return Promise.resolve<number>(<any>null);
     }
 
-    update(id: number | undefined, brandName: string | null | undefined, description: string | null | undefined, shortDescription: string | null | undefined, name: string | null | undefined, farsiName: string | null | undefined, price: number | undefined, addedImages: FileParameter[] | null | undefined, removedImages: string[] | null | undefined, productSpecifications: string | null | undefined, categoryId: number | undefined): Promise<number> {
+    update(id: number | undefined, brandName: string | null | undefined, description: string | null | undefined, shortDescription: string | null | undefined, name: string | null | undefined, farsiName: string | null | undefined, price: number | undefined, addedImages: FileParameter[] | null | undefined, removedImages: string | null | undefined, productSpecifications: string | null | undefined, categoryId: number | undefined): Promise<number> {
         let url_ = this.baseUrl + "/Product/UpdateProduct";
         url_ = url_.replace(/[?&]$/, "");
 

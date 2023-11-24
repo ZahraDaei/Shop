@@ -9,7 +9,6 @@ export default function Example() {
     const [submittedDate, setSubmittedDate] = useState();
 
     const onSubmit = ( date ) => {
-        console.log("dataaa",date)
         setSubmittedDate(date.date);
     };
 

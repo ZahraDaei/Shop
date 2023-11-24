@@ -109,7 +109,6 @@ export default function CreateCategory() {
     const [imageFile, setImageFile] = useState("/images/placeholder.png");
 
     function handleChange(e) {
-        console.log(e.target.files);
         setFile(e.target.files[0])
         setImageFile(URL.createObjectURL(e.target.files[0]));
     }

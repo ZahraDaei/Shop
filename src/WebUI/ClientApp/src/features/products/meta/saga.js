@@ -63,7 +63,7 @@ export const getProduct = async (payload) => {
 // Worker saga will be fired on USER_FETCH_REQUESTED actions
 function* fetchProductById(action) {
     try {
-        const product = yield call(getProduct,action.payload);
+        const product = yield call(getProduct, action.payload);
         yield put({ type: "GET_PRODUCT_BY_ID_SUCCEEDED" });
         yield put({ type: "product/getProductById", payload: product });
     } catch (e) {

@@ -7,7 +7,6 @@ export default function Example() {
     const [submittedDate, setSubmittedDate] = useState();
 
     const onSubmit = ({ date }) => {
-console.log("date",date)
         setSubmittedDate(date);
 
     };
@@ -28,7 +27,6 @@ console.log("date",date)
                             <input
                                 value={value}
                                 onChange={(date) => {
-                                    console.log("dddd",value)
                                     onChange(date);
                                 }}
                         

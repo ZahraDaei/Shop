@@ -38,8 +38,7 @@ const ProductDetail = (props) => {
                                 style={{ maxWidth: "100%" }}
                             />
                         </div>
-                        <div className="d-flex flex-row" style={{ maxWidth: "100%",height:"25%" }}
->
+                        <div className="d-flex flex-row" style={{ maxWidth: "100%",height:"25%" }}>
                             {
                                 product?.images.map(x =>
                                     <div>
