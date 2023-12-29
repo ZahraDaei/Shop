@@ -88,16 +88,17 @@
 }
 
 .footer::before {
-    content: "";
-    background-image: url('./image4.jpg');
-    background-size: cover;
     position: absolute;
+    content: "";
+    background-image: url(./backCoffee.png);
+    background-repeat: repeat;
     top: 0px;
     right: 0px;
     bottom: 0px;
     left: 0px;
-    opacity: 0.4;
+    opacity: 0.1;
     height: 300px;
+    background-size: 10%;
 }
 
 .footer div {
