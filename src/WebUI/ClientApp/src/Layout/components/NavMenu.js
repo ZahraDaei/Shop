@@ -95,7 +95,7 @@ const NavMenu = (props) => {
           <Navbar.Collapse id="basic-navbar-nav">
             <Nav className="ml-auto">
               <h4>
-                <Link to="/">توکا</Link>
+                <Link to="/">شهزاد</Link>
               </h4>
               <Nav.Link className="categoryShower " href="#">
                 {" "}
@@ -106,8 +106,6 @@ const NavMenu = (props) => {
                   {renderTree(productCategories.children)}
                 </div>
               </div>
-              <Nav.Link href="/checkout/cart"> سؤالی دارید؟</Nav.Link>
-              <Nav.Link href="/checkout/cart">سوپر مارکت</Nav.Link>
               <Nav.Link href="/checkout/cart">سبد خرید</Nav.Link>
             </Nav>
           </Navbar.Collapse>

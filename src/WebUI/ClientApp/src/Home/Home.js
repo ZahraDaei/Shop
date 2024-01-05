@@ -18,7 +18,7 @@ const Home = (props) => {
     return <>
         <div className="fixedBgTop">
             <div className="insideFiexedBg">
-                <p>
+                <p style={{ textAlign:"left" }}>
                     فروشگاه شهزاد
                 </p>
             </div>

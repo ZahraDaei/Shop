@@ -132,8 +132,8 @@ namespace Shop.WebUI
                 if (env.IsDevelopment())
                 {
                     //spa.UseAngularCliServer(npmScript: "start");
-                    //spa.UseProxyToSpaDevelopmentServer(Configuration["SpaBaseUrl"] ?? "http://localhost:3000");
-                    spa.UseReactDevelopmentServer(npmScript: "start");
+                    spa.UseProxyToSpaDevelopmentServer(Configuration["SpaBaseUrl"] ?? "http://localhost:3000");
+                    //spa.UseReactDevelopmentServer(npmScript: "start");
                 }
             });
         }

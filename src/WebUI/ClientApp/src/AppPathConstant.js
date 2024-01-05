@@ -27,10 +27,16 @@ export const Checkout={
     Payment:"payment"
 }
 
+const webSite = "/"
+export const Pages = {
+    CategoryList:"categoryList"
+}
+
 export const AppPath={
     Profile:`${profilePfx}`,
     User_Info:`${profilePfx}/${Profile.User_Info}`,
     Category:`${adminPfx}/${Admin.Category}`,
+    CategoryList: `${webSite}${Pages.CategoryList}`,
     CreateCategory:`${adminPfx}/${Admin.Category}/${Admin.CreateCategory}`,
     Product:`${adminPfx}/${Admin.Product}`,
     CreateProduct:`${adminPfx}/${Admin.Product}/${Admin.CreateProduct}`,

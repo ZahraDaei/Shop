@@ -19,13 +19,37 @@
     display: none;
 }
 
+@media (max-width: 993px) {
+    .responsiveNavMenu {
+        display: none;
+    }
+}
 
+.mobileMenu{
+    display:none;
+}
+@media(max-width: 993px) {
+
+    .mobileMenu {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-evenly;
+        position: fixed;
+        bottom: 0;
+        right: 0;
+        background-color: white;
+        width: 100%;
+        z-index: 1000;
+        padding: 10px;
+        color: gray;
+    }
+}
 
 .subCat {
     display: flex;
-    flex-direction:column;
-    flex-wrap:wrap;
-    line-height:10px;
+    flex-direction: column;
+    flex-wrap: wrap;
+    line-height: 10px;
     position: absolute;
     top: 10px;
     right: 100px;

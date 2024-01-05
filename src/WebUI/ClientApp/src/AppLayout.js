@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Route } from 'react-router';
 import Layout from './Layout/Layout';
+import CategoryList from './Layout/CategoryList';
 import Home from './Home/Home';
 import Profile from './features/user/components/Profile';
 import AuthorizeRoute from './components/api-authorization/AuthorizeRoute';
@@ -33,6 +34,7 @@ const AppLayout = props => {
             <Route exact path={AppPath.CheckoutCart} component={Cart} />
             <AuthorizeRoute path={AppPath.Profile} component={Profile} />
             <AuthorizeRoute exact path={AppPath.Category} component={AdminCategory} />
+            <AuthorizeRoute exact path={AppPath.CategoryList} component={CategoryList} />
             <AuthorizeRoute exact path={AppPath.CreateCategory} component={CreateCategory} />
             <AuthorizeRoute exact path={AppPath.Product} component={AdminProduct} />
             <AuthorizeRoute exact path={AppPath.CreateProduct} component={CreateProduct} />
