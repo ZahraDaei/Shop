@@ -32,9 +32,9 @@ const AppLayout = props => {
             <Route exact path='/search/:categoryName' component={Product} />
             <Route exact path="/productdetail/:id" component={ProductDetail} />
             <Route exact path={AppPath.CheckoutCart} component={Cart} />
+            <Route exact path={AppPath.CategoryList} component={CategoryList} />
             <AuthorizeRoute path={AppPath.Profile} component={Profile} />
             <AuthorizeRoute exact path={AppPath.Category} component={AdminCategory} />
-            <AuthorizeRoute exact path={AppPath.CategoryList} component={CategoryList} />
             <AuthorizeRoute exact path={AppPath.CreateCategory} component={CreateCategory} />
             <AuthorizeRoute exact path={AppPath.Product} component={AdminProduct} />
             <AuthorizeRoute exact path={AppPath.CreateProduct} component={CreateProduct} />
